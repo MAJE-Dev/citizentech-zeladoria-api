@@ -66,8 +66,8 @@ O domínio é estruturado em **cinco entidades principais inter-relacionadas**, 
 ### 3.1 Clonar o repositório
 Clone o repositório para o seu diretório de desenvolvimento local:
 ```bash
-git clone <URL_DO_SEU_REPOSITORIO>
-cd <NOME_DA_PASTA_DO_PROJETO>
+git clone [https://github.com/MAJE-Dev/citizentech-zeladoria-api.git](https://github.com/MAJE-Dev/citizentech-zeladoria-api.git)
+cd citizentech-zeladoria-api
 ```
 
 ### 3.2 Restaurar e compilar as dependências
