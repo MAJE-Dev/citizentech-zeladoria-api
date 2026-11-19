@@ -111,28 +111,71 @@ Após iniciar, abra o Swagger no endereço exibido no console (ex: `http://local
 
 ---
 
-### 1. Criar Ocorrência com Imagem (`C3` · `C4` · `C6`)
-* **Rota:** `POST /api/Ocorrencias`
-* **Formato de envio:** `multipart/form-data`
-* **Campos enviados:**
-  * `Titulo` (`string`): `"Buraco na via pública"`
-  * `Descricao` (`string`): `"Buraco grande atrapalhando o trânsito na avenida principal."`
-  * `Endereco` (`string`): `"Av. Paulista, 1000 - São Paulo, SP"`
-  * `CategoriaId` (`int`): `1`
-  * `UsuarioId` (`int`): `1`
-  * `Imagem` (`IFormFile`): arquivo `.png` ou `.jpg`
-* **Retorno esperado (`201 Created`):**
-  ```json
-  {
-    "id": 1,
-    "titulo": "Buraco na via pública",
-    "descricao": "Buraco grande atrapalhando o trânsito na avenida principal.",
-    "categoriaNome": "Iluminação Pública",
-    "endereco": "Av. Paulista, 1000 - São Paulo, SP",
-    "statusDescricao": "Aberta",
-    "dataRegistro": "2026-11-18T21:23:58.5496572Z",
-    "usuarioNome": "Carlos Silva",
-    "imagemUrl": "/api/Ocorrencias/1/imagem"
-  }
+### 🟢 1. Cadastrar Ocorrência (`POST/api/Ocorrencias`)
+Registra uma nova ocorrência urbana no sistema.
+* **Retorno de sucesso:** `201 Created`
 
+<img width="1276" height="764" alt="post-method-log" src="https://github.com/user-attachments/assets/87966bf0-07d3-40f5-a5bd-da68afb3a305" />
+
+
+### 🔵 2. Listar Ocorrências (`GET/api/Ocorrencias`)
+Retorna a listagem de todas as ocorrências registradas (suporta filtros por `categoria` e `status`).
+* **Retorno de sucesso:** `200 OK`
+
+
+<img width="1134" height="824" alt="get-method-log" src="https://github.com/user-attachments/assets/b1ac0b0b-b979-4fe2-b8d9-405c4da135ec" />
+
+
+### 🔵 3. Listar Ocorrência por ID (`GET/api/Ocorrencias/{id}`)
+Consulta os detalhes de uma ocorrência específica pelo seu identificador único.
+* **Retorno de sucesso:** `200 OK`
+
+
+<img width="1135" height="660" alt="get-id-method-log" src="https://github.com/user-attachments/assets/0570cd82-ecee-49de-b34b-196b34a14a32" />
+
+
+
+### 🟢 4. Criação Transacional — Commit (`POST/api/Ocorrencias/transacional?simularErro=false`)
+#### Cenário 1 — simularErro=false (201 Created / Commit)
+- Confirma e persiste todas as operações da transação de forma atômica, retornando os dados da ocorrência criada.
+
+
+
+
+<img width="1136" height="658" alt="post-method-commit-log" src="https://github.com/user-attachments/assets/52dcd01e-b956-4759-8689-a26577227b76" />
+
+
+
+
+### 🟢 4. Criação Transacional — Rollback (`POST/api/Ocorrencias/transacional?simularErro=false`)
+#### Cenário 2 — simularErro=true (400 Bad Request / Rollback):
+- Simula uma falha após o início da operação e reverte toda a transação, sem deixar registros parciais:
+
+
+
+<img width="1136" height="602" alt="post-method-rollback-log" src="https://github.com/user-attachments/assets/a2c43c63-dbbf-4a0f-8f25-791e1ddee8e9" />
+
+
+
+### 🟠 5. Atualizar Status da Ocorrência (`PATCH/api/Ocorrencias/{id}/status`)
+Atualiza os dados ou o status de uma ocorrência existente.
+- Retorno esperado **(200 OK):**
+
+*Obs: Retorna a ocorrência com o status atualizado (ou 404 Not Found caso o ID da ocorrência ou status seja inválido/inexistente).*
+
+
+
+
+<img width="1134" height="658" alt="patch-method-id-log" src="https://github.com/user-attachments/assets/12d4b897-1b30-4a3c-aadb-558d2a930adb" />
+
+
+
+
+### 🔴 5. Remover Ocorrência (`DELETE/api/ocorrencias/{id}`)
+Remove uma ocorrência do sistema.
+* **Retorno de sucesso:** `204 No Content`
+
+
+
+<img width="1138" height="672" alt="delete-method-id-log" src="https://github.com/user-attachments/assets/069f469c-ece9-4d15-a9f2-7f1f3c055b23" />
 
