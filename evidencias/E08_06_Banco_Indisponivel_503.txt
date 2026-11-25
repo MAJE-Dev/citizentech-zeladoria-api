@@ -1,0 +1,52 @@
+﻿
+====================================================================================================
+C6/R7 - Banco indisponível: API sobe apontando para um banco inexistente e responde 503 tratado | E08
+Data/hora: 2026-11-25 19:57:29 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: 503 em ProblemDetails, sem stack trace nem string de conexão na resposta; API continua respondendo.
+    [API] processo PID 23548 encerrado em 19:57:29 (API parada)
+    [API] sessão 4 iniciada: PID 25012, http://localhost:5081, ambiente Development, log testes\saida\api_sessao4.log
+
+>>> GET /api/ocorrencias com banco indisponível
+    curl.exe http://localhost:5081/api/ocorrencias
+    HTTP/1.1 503 Service Unavailable
+    Content-Type: application/problem+json
+    Cache-Control: no-cache,no-store
+    Expires: -1
+    Pragma: no-cache
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.6.4","title":"Banco de dados indisponível","status":503,"detail":"Não foi possível acessar o banco agora. Nenhuma alteração foi confirmada. Tente novamente em instantes.","traceId":"00-5302cd0299ad070f836eba6c6329ccc7-750984995adca7bc-00"}
+    => Esperado HTTP 503 | Observado HTTP 503 | CONFERE
+
+>>> POST atendimento com banco indisponível (nenhuma escrita possível)
+    curl.exe -X POST http://localhost:5081/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_t10.json
+    HTTP/1.1 503 Service Unavailable
+    Content-Type: application/problem+json
+    Cache-Control: no-cache,no-store
+    Expires: -1
+    Pragma: no-cache
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.6.4","title":"Banco de dados indisponível","status":503,"detail":"Não foi possível acessar o banco agora. Nenhuma alteração foi confirmada. Tente novamente em instantes.","traceId":"00-32e456c9fa3543b511b753453b0b7e14-513b7ac9ceacc36b-00"}
+    => Esperado HTTP 503 | Observado HTTP 503 | CONFERE
+    => Verificação: Corpo do 503 não expõe string de conexão, nome do banco nem stack trace | CONFERE
+
+>>> GET /api/equipe (não depende do banco) continua 200
+    curl.exe http://localhost:5081/api/equipe
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset=utf-8
+    
+    {"citizenTech":"Zeladoria API Urbana","turma":"3ESPH","liderRm":"556095","integrantes":[{"nomeCompleto":"Kaio Drago Lima Souza","rm":"556095","turma":"3ESPH","identificacao":"KaioSouza_RM556095","lider":true},{"nomeCompleto":"Gustavo Viega Martins","rm":"555885","turma":"3ESPH","identificacao":"GustavoMartins_RM555885","lider":false},{"nomeCompleto":"Gustavo Yuji Osugi","rm":"555034","turma":"3ESPH","identificacao":"GustavoOsugi_RM555034","lider":false},{"nomeCompleto":"Otávio Santos de Lima Ferrão","rm":"556452","turma":"3ESPH","identificacao":"OtavioFerrao_RM556452","lider":false},{"nomeCompleto":"Vitor Rivas Cardoso","rm":"556404","turma":"3ESPH","identificacao":"VitorCardoso_RM556404","lider":false}]}
+    => Esperado HTTP 200 | Observado HTTP 200 | CONFERE
+    [API] processo PID 25012 encerrado em 19:57:31 (API parada)
+
+--- API normal reiniciada ao final ------------------------------------------------------------
+    [API] sessão 5 iniciada: PID 24820, http://localhost:5080, ambiente Development, log testes\saida\api_sessao5.log
+
+>>> GET /api/ocorrencias/1 (estado final)
+    curl.exe http://localhost:5080/api/ocorrencias/1
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset=utf-8
+    
+    {"id":1,"titulo":"Buracos com acúmulo de água na esquina","regiao":"Subprefeitura Mooca","bairro":"Mooca","categoria":"Pavimentação - buraco na via","endereco":"Rua Fictícia das Oficinas x Rua Exemplo (Mooca)","unidade":"m2","quantidadeEstimada":20.000,"quantidadePendente":17.000,"situacao":"EM_ATENDIMENTO","abertaUtc":"2026-11-15T12:00:00Z","imagens":1,"atendimentos":1}
+    => Esperado HTTP 200 | Observado HTTP 200 | CONFERE
+    [API] processo PID 24820 encerrado em 19:57:33 (API parada)

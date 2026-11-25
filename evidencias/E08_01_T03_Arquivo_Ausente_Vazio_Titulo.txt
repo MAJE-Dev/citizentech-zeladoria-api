@@ -1,0 +1,33 @@
+﻿
+====================================================================================================
+T03 - POST sem arquivo, com zero bytes e com título vazio (demais campos válidos) | E08
+Data/hora: 2026-11-25 19:57:12 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: 4xx com mensagem; nenhum registro novo.
+    Imagens no banco ANTES: 1
+
+>>> POST sem o campo Arquivo
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens --form-string Titulo=Sem arquivo --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Arquivo ausente ou vazio","status":400,"detail":"Envie uma imagem PNG/JPEG não vazia no campo Arquivo.","traceId":"00-0285dc582048c50181850a234f132ab5-952485d03b233cec-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+>>> POST com arquivo de 0 bytes
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\vazio.png;type=image/png --form-string Titulo=Arquivo vazio --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Arquivo ausente ou vazio","status":400,"detail":"Envie uma imagem PNG/JPEG não vazia no campo Arquivo.","traceId":"00-edafb0dab3b23ed1dab6a27b86c45997-3732de8e87e902f4-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+>>> POST com título vazio (arquivo válido)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\amostras\buraco_poste_apagado_mooca.jpg;type=image/jpeg --form-string Titulo= --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Título inválido","status":400,"detail":"Título obrigatório, com até 100 caracteres.","traceId":"00-8b20d38da1012ccbdbf8ede6189a9ab0-8375e9121e955098-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+    Imagens no banco DEPOIS: 1
+    => Verificação: Nenhum registro novo em IMAGEM_OCORRENCIA | CONFERE

@@ -1,0 +1,58 @@
+// Zeladoria API Urbana - GS 2026.2 C# - 3ESPH - líder KaioSouza_RM556095
+// Modelo lógico alternativo para colar em https://dbdiagram.io (o editável principal é Zeladoria_Modelo.drawio).
+// Tipos de referência SQL Server; o DDL físico oficial é sql/sqlserver/01_Criar_Estrutura.sql.
+
+Project Zeladoria_API_Urbana {
+  database_type: 'SQLServer'
+  Note: 'Cidadão registra ocorrências urbanas com foto (bytes no banco); equipe de campo registra atendimentos que baixam o pendente.'
+}
+
+Table REGIAO {
+  ID int [pk, increment, note: 'IDENTITY(100,1); carga usa 1..2']
+  NOME nvarchar(100) [not null, note: 'Subprefeitura']
+  BAIRRO nvarchar(80) [not null]
+  CIDADE nvarchar(80) [not null]
+}
+
+Table CATEGORIA_OCORRENCIA {
+  ID int [pk, increment]
+  NOME nvarchar(60) [not null, unique]
+}
+
+Table OCORRENCIA {
+  ID int [pk, increment]
+  REGIAOID int [not null, ref: > REGIAO.ID]
+  CATEGORIAID int [not null, ref: > CATEGORIA_OCORRENCIA.ID]
+  TITULO nvarchar(100) [not null]
+  DESCRICAO nvarchar(500) [not null]
+  ENDERECO nvarchar(150) [not null]
+  UNIDADE nvarchar(10) [not null, note: 'm2, m3, m, un, kg']
+  QUANTIDADEESTIMADA decimal(12,3) [not null, note: 'CHECK > 0']
+  QUANTIDADEPENDENTE decimal(12,3) [not null, note: 'saldo de serviço; CHECK 0 <= pendente <= estimada']
+  SITUACAO nvarchar(20) [not null, note: 'ABERTA | EM_ATENDIMENTO | CONCLUIDA; CONCLUIDA <=> pendente = 0']
+  ABERTAUTC datetime2(6) [not null]
+}
+
+Table IMAGEM_OCORRENCIA {
+  ID int [pk, increment]
+  OCORRENCIAID int [not null, ref: > OCORRENCIA.ID]
+  TITULO nvarchar(100) [not null]
+  NOMEARQUIVO nvarchar(200) [not null]
+  MIME nvarchar(30) [not null, note: 'image/png | image/jpeg']
+  TAMANHOBYTES int [not null, note: 'CHECK 1..2097152 e = DATALENGTH(DADOS)']
+  HASHSHA256 char(64) [not null]
+  DADOS varbinary(max) [not null, note: 'bytes reais da imagem']
+  EQUIPERM nvarchar(20) [not null]
+  EXECUTOR nvarchar(80) [not null]
+  ENVIADAUTC datetime2(6) [not null]
+}
+
+Table ATENDIMENTO_OCORRENCIA {
+  ID int [pk, increment]
+  OCORRENCIAID int [not null, ref: > OCORRENCIA.ID]
+  QUANTIDADE decimal(12,3) [not null, note: 'CHECK > 0']
+  EQUIPECAMPOCODIGO nvarchar(40) [not null, note: 'código fictício da equipe de campo']
+  EQUIPERM nvarchar(20) [not null]
+  EXECUTOR nvarchar(80) [not null]
+  CRIADOUTC datetime2(6) [not null]
+}

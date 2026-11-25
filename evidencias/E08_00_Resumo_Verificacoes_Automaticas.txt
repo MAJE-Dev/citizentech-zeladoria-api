@@ -1,0 +1,66 @@
+﻿
+====================================================================================================
+Resumo das verificações automáticas do roteiro (esperado x observado)
+Data/hora: 2026-11-25 19:57:33 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+
+Arquivo                                     Verificacao                                                                      Esperado   Observado Situacao
+-------                                     -----------                                                                      --------   --------- --------
+E04_01_T01_Consultas_e_Upload.txt           GET /api/equipe (identificação acadêmica)                                        200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/regioes                                                                 200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/categorias                                                              200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/ocorrencias?regiaoId=1 (filtro LINQ)                                    200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/ocorrencias/1                                                           200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           POST /api/ocorrencias (JSON)                                                     201              201 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           Cliente: enviar-imagem 1 (JPEG da amostra)                                       0                  0 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/imagens/100 (metadados JSON, sem bytes)                                 200              200 CONFERE 
+E04_01_T01_Consultas_e_Upload.txt           GET /api/ocorrencias/1/imagens                                                   200              200 CONFERE 
+E04_02_T01_SQL_Bytes_no_Banco.txt           DATALENGTH(DADOS) = 52484 = tamanho do arquivo original (52484)                  verdadeiro      True CONFERE 
+E04_02_T01_SQL_Bytes_no_Banco.txt           SHA-256 calculado pelo SQL Server = SHA-256 do arquivo original                  verdadeiro      True CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       GET com a API parada (confirma que nada responde)                                0                  0 CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       PID mudou após reinício (22292 -> 24984)                                         verdadeiro      True CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       GET /api/imagens/100 (metadados após reinício)                                   200              200 CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       Cliente (novo processo): baixar-imagem 100 via GET /conteudo (stream -> arquivo) 0                  0 CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       Iguais (bytes recuperados da API após reinício = original)                       verdadeiro      True CONFERE 
+E05_01_T02_Reinicio_e_Recuperacao.txt       Captura PNG da exibição gerada                                                   verdadeiro      True CONFERE 
+E08_01_T03_Arquivo_Ausente_Vazio_Titulo.txt POST sem o campo Arquivo                                                         400              400 CONFERE 
+E08_01_T03_Arquivo_Ausente_Vazio_Titulo.txt POST com arquivo de 0 bytes                                                      400              400 CONFERE 
+E08_01_T03_Arquivo_Ausente_Vazio_Titulo.txt POST com título vazio (arquivo válido)                                           400              400 CONFERE 
+E08_01_T03_Arquivo_Ausente_Vazio_Titulo.txt Nenhum registro novo em IMAGEM_OCORRENCIA                                        verdadeiro      True CONFERE 
+E08_02_T04_Formato_Disfarce_Tamanho.txt     POST .gif (formato não aceito)                                                   415              415 CONFERE 
+E08_02_T04_Formato_Disfarce_Tamanho.txt     POST .png com bytes de texto (extensão e MIME mentem)                            415              415 CONFERE 
+E08_02_T04_Formato_Disfarce_Tamanho.txt     POST .jpg com 2,5 MiB (acima de 2 MiB, abaixo de 3 MiB)                          413              413 CONFERE 
+E08_02_T04_Formato_Disfarce_Tamanho.txt     Nenhum registro novo em IMAGEM_OCORRENCIA                                        verdadeiro      True CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     GET /api/imagens/999999 (metadados)                                              404              404 CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     GET /api/imagens/999999/conteudo                                                 404              404 CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     POST imagem válida para ocorrência 999999 (vínculo inexistente)                  404              404 CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     Cliente: metadados 999999 (trata 404 sem travar)                                 1                  1 CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     Cliente segue utilizável: equipe                                                 0                  0 CONFERE 
+E08_03_T05_ID_Inexistente_e_Vinculo.txt     Nenhum registro novo em IMAGEM_OCORRENCIA (1 -> 1)                               verdadeiro      True CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          quantidade 0                                                                     400              400 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          quantidade negativa (-5)                                                         400              400 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          quantidade com 4 casas (1.2345)                                                  400              400 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          saldo insuficiente (999 > pendente)                                              409              409 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          executor não cadastrado (Intruso_RM000000)                                       400              400 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          ocorrência inexistente (999999)                                                  404              404 CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          Pendente da ocorrência 1 continua 20.000                                         verdadeiro      True CONFERE 
+E08_04_T06_Transacao_Rejeicoes.txt          Nenhum atendimento gravado                                                       verdadeiro      True CONFERE 
+E06_01_T07_COMMIT.txt                       Cliente: atender 1 3 EQ_ZEL_MOOCA_01 (sem falha)                                 0                  0 CONFERE 
+E06_01_T07_COMMIT.txt                       Pendente = 17.000 após COMMIT                                                    verdadeiro      True CONFERE 
+E06_01_T07_COMMIT.txt                       1 atendimento persistido                                                         verdadeiro      True CONFERE 
+E07_01_T08_ROLLBACK.txt                     Cliente: atender 1 2 EQ_ZEL_MOOCA_01 --simular-falha                             1                  1 CONFERE 
+E07_01_T08_ROLLBACK.txt                     Pendente continua 17.000 após ROLLBACK                                           verdadeiro      True CONFERE 
+E07_01_T08_ROLLBACK.txt                     Continua 1 atendimento (INSERT desfeito)                                         verdadeiro      True CONFERE 
+E08_05_T10_API_Parada_e_Retomada.txt        Cliente com API parada: ocorrencias                                              2                  2 CONFERE 
+E08_05_T10_API_Parada_e_Retomada.txt        Cliente com API parada: atender 1 1 (operação de escrita)                        2                  2 CONFERE 
+E08_05_T10_API_Parada_e_Retomada.txt        Pendente continua 17.000 (nenhuma escrita sem API)                               verdadeiro      True CONFERE 
+E08_05_T10_API_Parada_e_Retomada.txt        Cliente após reinício: ocorrencia 1                                              0                  0 CONFERE 
+E08_06_Banco_Indisponivel_503.txt           GET /api/ocorrencias com banco indisponível                                      503              503 CONFERE 
+E08_06_Banco_Indisponivel_503.txt           POST atendimento com banco indisponível (nenhuma escrita possível)               503              503 CONFERE 
+E08_06_Banco_Indisponivel_503.txt           Corpo do 503 não expõe string de conexão, nome do banco nem stack trace          verdadeiro      True CONFERE 
+E08_06_Banco_Indisponivel_503.txt           GET /api/equipe (não depende do banco) continua 200                              200              200 CONFERE 
+E08_06_Banco_Indisponivel_503.txt           GET /api/ocorrencias/1 (estado final)                                            200              200 CONFERE 
+
+
+
+Total: 54 verificações | divergências: 0

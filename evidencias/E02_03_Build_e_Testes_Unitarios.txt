@@ -1,0 +1,31 @@
+﻿E02 - Build e testes unitários realmente executados em 2026-11-25 19:56:59 -03:00 (após a correção E09_02)
+
+> dotnet build src\CitizenTech.Zeladoria.slnx
+
+Compilação com êxito.
+    0 Aviso(s)
+    0 Erro(s)
+
+Tempo Decorrido 00:00:02.52
+
+> dotnet test src\CitizenTech.Zeladoria.Tests --no-build --logger "console;verbosity=normal"
+[xUnit.net 00:00:00.08]   Discovering: CitizenTech.Zeladoria.Tests
+[xUnit.net 00:00:00.14]   Discovered:  CitizenTech.Zeladoria.Tests
+[xUnit.net 00:00:00.17]   Starting:    CitizenTech.Zeladoria.Tests
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Png_exige_extensao_mime_e_assinatura_coerentes(nome: "foto.png", mime: "image/png", esperado: True) [62 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Png_exige_extensao_mime_e_assinatura_coerentes(nome: "foto.png", mime: "image/jpeg", esperado: False) [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Png_exige_extensao_mime_e_assinatura_coerentes(nome: "foto.jpg", mime: "image/png", esperado: False) [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Png_exige_extensao_mime_e_assinatura_coerentes(nome: "foto.PNG", mime: "image/png", esperado: True) [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Jpeg_valido_e_aceito(nome: "foto.jpeg") [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Jpeg_valido_e_aceito(nome: "foto.jpg") [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Equipe_valida_executor_e_lider [3 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Equipe_sem_lider_ou_com_identificacao_errada_falha [< 1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Png_disfarcado_com_texto_e_rejeitado [< 1 ms]
+[xUnit.net 00:00:00.30]   Finished:    CitizenTech.Zeladoria.Tests
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Falha_de_banco_e_reconhecida_mesmo_embrulhada [1 ms]
+  Aprovado CitizenTech.Zeladoria.Tests.ValidacoesTests.Nome_com_caminho_do_cliente_vira_apenas_o_arquivo [< 1 ms]
+
+Execução de Teste Bem-sucedida.
+Total de testes: 11
+     Aprovados: 11
+Tempo total: 0,8106 Segundos

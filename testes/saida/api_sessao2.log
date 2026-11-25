@@ -1,0 +1,215 @@
+2026-11-25 19:57:09.211 info: CitizenTech.Zeladoria.Api[0]
+      Zeladoria API iniciada | CitizenTech=Zeladoria API Urbana | turma=3ESPH | lider RM=556095 | ambiente=Development
+2026-11-25 19:57:09.266 info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5080
+2026-11-25 19:57:09.267 info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+2026-11-25 19:57:09.267 info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+2026-11-25 19:57:09.267 info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\src\CitizenTech.Zeladoria.Api
+2026-11-25 19:57:10.491 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (32ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[ID], [i].[OCORRENCIAID], [i].[TITULO], [i].[NOMEARQUIVO], [i].[MIME], [i].[TAMANHOBYTES], [i].[HASHSHA256], [i].[EQUIPERM], [i].[EXECUTOR], [i].[ENVIADAUTC]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:10.870 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[DADOS] AS [Dados], [i].[MIME] AS [Mime], [i].[HASHSHA256] AS [HashSha256]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:11.619 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[DADOS] AS [Dados], [i].[MIME] AS [Mime], [i].[HASHSHA256] AS [HashSha256]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:12.760 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:12.870 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:13.242 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[ID], [i].[OCORRENCIAID], [i].[TITULO], [i].[NOMEARQUIVO], [i].[MIME], [i].[TAMANHOBYTES], [i].[HASHSHA256], [i].[EQUIPERM], [i].[EXECUTOR], [i].[ENVIADAUTC]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:13.351 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[DADOS] AS [Dados], [i].[MIME] AS [Mime], [i].[HASHSHA256] AS [HashSha256]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:13.459 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:13.741 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[ID], [i].[OCORRENCIAID], [i].[TITULO], [i].[NOMEARQUIVO], [i].[MIME], [i].[TAMANHOBYTES], [i].[HASHSHA256], [i].[EQUIPERM], [i].[EXECUTOR], [i].[ENVIADAUTC]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:15.477 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @_8__locals1_ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:15.484 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20209]
+      Beginning transaction with isolation level 'Unspecified'.
+2026-11-25 19:57:15.490 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20200]
+      Began transaction with isolation level 'ReadCommitted'.
+2026-11-25 19:57:15.491 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] BEGIN | ocorrencia=1 quantidade=999 executor=VitorCardoso_RM556404 simularFalha=False
+2026-11-25 19:57:15.529 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[@q='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE [o]
+      SET [o].[QUANTIDADEPENDENTE] = [o].[QUANTIDADEPENDENTE] - @q,
+          [o].[SITUACAO] = CASE
+              WHEN [o].[QUANTIDADEPENDENTE] - @q = 0.0 THEN N'CONCLUIDA'
+              ELSE N'EM_ATENDIMENTO'
+          END
+      FROM [OCORRENCIA] AS [o]
+      WHERE [o].[ID] = @_8__locals1_ocorrenciaId AND [o].[SITUACAO] <> N'CONCLUIDA' AND [o].[QUANTIDADEPENDENTE] >= @q
+2026-11-25 19:57:15.533 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20211]
+      Rolling back transaction.
+2026-11-25 19:57:15.535 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20203]
+      Rolled back transaction.
+2026-11-25 19:57:15.542 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [o].[QUANTIDADEPENDENTE] AS [QuantidadePendente], [o].[UNIDADE] AS [Unidade], [o].[SITUACAO] AS [Situacao]
+      FROM [OCORRENCIA] AS [o]
+      WHERE [o].[ID] = @_8__locals1_ocorrenciaId
+2026-11-25 19:57:15.544 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] ROLLBACK sem alteracoes | pendente=20.000 situacao=ABERTA
+2026-11-25 19:57:15.546 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20204]
+      Disposing transaction.
+2026-11-25 19:57:15.867 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @_8__locals1_ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:16.361 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @_8__locals1_ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:16.366 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20209]
+      Beginning transaction with isolation level 'Unspecified'.
+2026-11-25 19:57:16.366 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20200]
+      Began transaction with isolation level 'ReadCommitted'.
+2026-11-25 19:57:16.367 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] BEGIN | ocorrencia=1 quantidade=3 executor=VitorCardoso_RM556404 simularFalha=False
+2026-11-25 19:57:16.368 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@q='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE [o]
+      SET [o].[QUANTIDADEPENDENTE] = [o].[QUANTIDADEPENDENTE] - @q,
+          [o].[SITUACAO] = CASE
+              WHEN [o].[QUANTIDADEPENDENTE] - @q = 0.0 THEN N'CONCLUIDA'
+              ELSE N'EM_ATENDIMENTO'
+          END
+      FROM [OCORRENCIA] AS [o]
+      WHERE [o].[ID] = @_8__locals1_ocorrenciaId AND [o].[SITUACAO] <> N'CONCLUIDA' AND [o].[QUANTIDADEPENDENTE] >= @q
+2026-11-25 19:57:16.368 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] escrita 1/2 OK: UPDATE OCORRENCIA 1 (1 linha)
+2026-11-25 19:57:16.488 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20212]
+      Creating transaction savepoint.
+2026-11-25 19:57:16.491 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20213]
+      Created transaction savepoint.
+2026-11-25 19:57:16.498 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@p0='?' (Scale = 6) (DbType = DateTime2), @p1='?' (Size = 40), @p2='?' (Size = 20), @p3='?' (Size = 80), @p4='?' (DbType = Int32), @p5='?' (Precision = 12) (Scale = 3) (DbType = Decimal)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      INSERT INTO [ATENDIMENTO_OCORRENCIA] ([CRIADOUTC], [EQUIPECAMPOCODIGO], [EQUIPERM], [EXECUTOR], [OCORRENCIAID], [QUANTIDADE])
+      OUTPUT INSERTED.[ID]
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+2026-11-25 19:57:16.517 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] escrita 2/2 OK: INSERT ATENDIMENTO_OCORRENCIA ID=100 (ainda NAO confirmado)
+2026-11-25 19:57:16.518 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20210]
+      Committing transaction.
+2026-11-25 19:57:16.520 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20202]
+      Committed transaction.
+2026-11-25 19:57:16.520 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] COMMIT | atendimento=100 confirmado junto com a baixa da ocorrencia 1
+2026-11-25 19:57:16.525 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [o].[QUANTIDADEPENDENTE] AS [QuantidadePendente], [o].[SITUACAO] AS [Situacao]
+      FROM [OCORRENCIA] AS [o]
+      WHERE [o].[ID] = @_8__locals1_ocorrenciaId
+2026-11-25 19:57:16.526 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20204]
+      Disposing transaction.
+2026-11-25 19:57:17.125 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @_8__locals1_ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:17.135 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20209]
+      Beginning transaction with isolation level 'Unspecified'.
+2026-11-25 19:57:17.135 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20200]
+      Began transaction with isolation level 'ReadCommitted'.
+2026-11-25 19:57:17.136 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] BEGIN | ocorrencia=1 quantidade=2 executor=VitorCardoso_RM556404 simularFalha=True
+2026-11-25 19:57:17.136 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@q='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE [o]
+      SET [o].[QUANTIDADEPENDENTE] = [o].[QUANTIDADEPENDENTE] - @q,
+          [o].[SITUACAO] = CASE
+              WHEN [o].[QUANTIDADEPENDENTE] - @q = 0.0 THEN N'CONCLUIDA'
+              ELSE N'EM_ATENDIMENTO'
+          END
+      FROM [OCORRENCIA] AS [o]
+      WHERE [o].[ID] = @_8__locals1_ocorrenciaId AND [o].[SITUACAO] <> N'CONCLUIDA' AND [o].[QUANTIDADEPENDENTE] >= @q
+2026-11-25 19:57:17.136 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] escrita 1/2 OK: UPDATE OCORRENCIA 1 (1 linha)
+2026-11-25 19:57:17.138 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20212]
+      Creating transaction savepoint.
+2026-11-25 19:57:17.138 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20213]
+      Created transaction savepoint.
+2026-11-25 19:57:17.139 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Scale = 6) (DbType = DateTime2), @p1='?' (Size = 40), @p2='?' (Size = 20), @p3='?' (Size = 80), @p4='?' (DbType = Int32), @p5='?' (Precision = 12) (Scale = 3) (DbType = Decimal)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      INSERT INTO [ATENDIMENTO_OCORRENCIA] ([CRIADOUTC], [EQUIPECAMPOCODIGO], [EQUIPERM], [EXECUTOR], [OCORRENCIAID], [QUANTIDADE])
+      OUTPUT INSERTED.[ID]
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+2026-11-25 19:57:17.139 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] escrita 2/2 OK: INSERT ATENDIMENTO_OCORRENCIA ID=101 (ainda NAO confirmado)
+2026-11-25 19:57:17.139 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20211]
+      Rolling back transaction.
+2026-11-25 19:57:17.139 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20203]
+      Rolled back transaction.
+2026-11-25 19:57:17.139 warn: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+      [TX] ROLLBACK | falha didatica apos UPDATE e INSERT; nada foi confirmado
+2026-11-25 19:57:17.142 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20204]
+      Disposing transaction.

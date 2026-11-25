@@ -1,215 +1,182 @@
-# 🏙️ CitizenTech Zeladoria — API de Gestão de Ocorrências Urbanas (.NET 10)
-> A CitizenTech.Zeladoria é uma API RESTful em .NET 10 (C#) que conecta cidadãos e a administração pública para otimizar a zeladoria urbana. A solução permite registrar, categorizar e acompanhar em tempo real demandas de infraestrutura (como buracos em vias e falhas de iluminação), substituindo processos manuais por um fluxo transparente, rastreável e eficiente.
+# Zeladoria API Urbana — GS 2026.2 · C# Software Development · 3ESPH
 
+Professor: Angel Antonio Gonzalez Martinez · Entrega: `GS_CSHARP_KaioSouza_RM556095.zip` (líder Kaio Drago Lima Souza, RM556095)
 
-## 👥Desenvolvedores
-| Turma | Nome | RM |
-| :--- | :--- | :--- |
-| 3ESPH | Gustavo Viega Martins | RM555885 |
-| 3ESPH | Gustavo Yuji Osugi | RM555034 |
-| 3ESPH | Kaio Drago Lima Souza | RM556095 |
-| 3ESPH | Otávio Santos de Lima Ferrão | RM556452 |
-| 3ESPH | Vitor Rivas Cardoso | RM556404 |
-
-
-## 📋 Ficha da CitizenTech
+## Ficha da CitizenTech
 
 | Campo | Detalhe |
-| :--- | :--- |
-| **Nome da CitizenTech** | Zeladoria API Urbana (`citizentech-zeladoria-api`) |
-| **Cidade e bairro** | São Paulo - SP (escopo municipal) |
-| **Cidadão beneficiado** | Moradores da cidade, pedestres e motoristas que convivem com falhas de infraestrutura urbana |
-| **Problema, em uma frase** | Dificuldade e morosidade dos cidadãos em reportar e acompanhar a resolução de problemas de infraestrutura pública. |
-| **Como funciona** | Uma REST API assíncrona em .NET 10 onde cidadãos registram ocorrências urbanas com envio de imagem (`multipart/form-data`), armazenando bytes reais e metadados no banco em memória, enquanto a gestão filtra, atualiza status, acompanha comentários e executa operações transacionais com segurança. |
-| **O que cada parte faz** | **Controllers (`OcorrenciasController`):** Expõe os endpoints REST (`GET`, `GET/{id}`, `GET/{id}/imagem`, `POST`, `POST/transacional`, `PATCH/{id}/status`, `DELETE`) com `[FromForm]`/`IFormFile` e validações de requisição.<br>**Services (`OcorrenciaService` / `IOcorrenciaService`):** Executa as regras de negócio, conversão de `IFormFile` para `byte[]` e metadados, validações de arquivo/regras, mapeamento de DTOs (`OcorrenciaDtos`), consultas assíncronas com EF Core/LINQ e controle de transações (`Commit` / `Rollback`).<br>**Data (`AppDbContext`):** Gerencia as 5 entidades relacionadas no banco de dados em memória via Entity Framework Core e transações atômicas.<br>**Middlewares (`ErrorHandlingMiddleware`):** Trata falhas e exceções de forma centralizada e retorna respostas HTTP/JSON consistentes sem efeitos colaterais.<br>**Tests (`CitizenTech.Zeladoria.Tests`):** Valida a lógica de negócio, validações, fluxos transacionais e cenários de falha de forma isolada com testes unitários em xUnit. |
-| **Link do repositório** | https://github.com/MAJE-Dev/citizentech-zeladoria-api |
-| **Indicador de impacto** | Redução no tempo de resposta para reparações de infraestrutura e aumento do percentual de ocorrências urbanas concluídas dentro do prazo. |
-| **ODS conectados** | **ODS 11** (Cidades e Comunidades Sustentáveis) e **ODS 9** (Indústria, Inovação e Infraestrutura) |
+|---|---|
+| **CitizenTech** | Zeladoria API Urbana (repositório `citizentech-zeladoria-api`) |
+| **Cidade e recorte** | São Paulo/SP. O recorte piloto é a **Mooca** (Subprefeitura Mooca), onde fizemos a escuta. A carga também tem Vila Mariana. |
+| **Cidadão beneficiado** | Pedestres, moradores e usuários de transporte público que dependem de vias e calçadas seguras, principalmente no trajeto a pé até o ponto de ônibus à noite. |
+| **Problema, em uma frase** | Buracos e postes apagados demoram meses para ser resolvidos, e quem reclama não vê o andamento ("só dizem que está em análise"). |
+| **Como funciona** | Uma Web API ASP.NET Core (.NET 10) com SQL Server. O cidadão registra a **ocorrência** e anexa a **foto do problema**, que é guardada em **bytes** no banco. A equipe de campo registra **atendimentos**: cada atendimento dá baixa na quantidade pendente (m², pontos de luz…) e grava o histórico **na mesma transação** (COMMIT/ROLLBACK). Qualquer pessoa consulta a situação, o pendente e o histórico por HTTP/JSON. |
+| **O que cada parte faz** | `src/CitizenTech.Zeladoria.Api`: controllers REST, validações, EF Core/LINQ, upload por stream, transação. `sql/sqlserver`: DDL, carga fictícia, verificação e demo de transação. `src/CitizenTech.Zeladoria.Cliente`: cliente HTTP em C# (HttpClient, multipart, streams, JSON) que consome a mesma API. `src/CitizenTech.Zeladoria.Tests`: testes unitários das validações. `testes/`: roteiro real T01–T10 e `api.http`. `modelo/`: diagrama editável e dicionário. |
+| **Observação e escuta** | Feita em 14/11/2026 (~14h30), na Mooca, por Vitor Rivas Cardoso, com um morador que passa pela rua todos os dias (anônimo). Ele relatou um buraco fundo há meses que enche d'água, metade dos postes apagados depois das 19h e dois protocolos abertos sem retorno. Registro completo: [`evidencias/E01_01_Registro_Escuta_Mooca_2026-11-14.md`](evidencias/E01_01_Registro_Escuta_Mooca_2026-11-14.md). |
+| **ODS** | **ODS 11, Cidades e Comunidades Sustentáveis** (principal). Metas 11.2: segurança viária para quem anda a pé e de moto. Meta 11.7: espaços públicos seguros e acessíveis. Secundários: **ODS 9.1** (infraestrutura de qualidade e resiliente) e **ODS 16.6** (instituições eficazes e transparentes, porque o cidadão passa a ver o andamento). Ícone oficial: `amostras/ODS11_icone_oficial_ONU_ptBR.svg`. |
+| **Papel da imagem** | A foto vinculada à ocorrência mostra a gravidade (buraco com água, rua escura), ajuda a triagem e a evitar duplicidade, e fica como prova "antes" para conferir o serviço. A amostra de teste é uma **ilustração própria** gerada por script (`amostras/Gerar-Amostras.ps1`). |
+| **Indicador proposto** | **PCR30: % de ocorrências concluídas em até 30 dias.** Unidade: % de ocorrências. Fórmula: ocorrências abertas no mês que chegaram a `CONCLUIDA` em até 30 dias de `ABERTAUTC` ÷ ocorrências abertas no mês × 100. A data de conclusão é o `CRIADOUTC` do atendimento que zerou o pendente. O cálculo é feito por região e categoria. Coleta futura: consulta SQL mensal em `OCORRENCIA` + `ATENDIMENTO_OCORRENCIA` num piloto com dados reais. **Não há medição real:** os dados são fictícios. |
+| **Ecossistema / parceiros** | Cidadãos e associações de bairro (relatam e acompanham). Subprefeitura (triagem e ordem de serviço). Equipes de conservação viária e de manutenção da iluminação pública (registram atendimentos). Canal oficial de solicitações da Prefeitura (ex.: SP156), como integração **futura, não implementada**. |
+| **Independência** | A API roda localmente, sem serviço pago nem IA na aplicação. Em C# não há dependência técnica de VMs/SO de outras disciplinas. |
+| **Repositório** | https://github.com/MAJE-Dev/citizentech-zeladoria-api |
 
+## Equipe (dados acadêmicos reais)
 
-## 🏗️ 1. Arquitetura e Stack Tecnológica
-> Principais recursos e ferramentas que sustentam a arquitetura e o funcionamento da aplicação.
+| Nome completo | RM | Turma | NomeAluno_RM | Líder |
+|---|---|---|---|---|
+| Kaio Drago Lima Souza | 556095 | 3ESPH | KaioSouza_RM556095 | **sim** |
+| Gustavo Viega Martins | 555885 | 3ESPH | GustavoMartins_RM555885 | não |
+| Gustavo Yuji Osugi | 555034 | 3ESPH | GustavoOsugi_RM555034 | não |
+| Otávio Santos de Lima Ferrão | 556452 | 3ESPH | OtavioFerrao_RM556452 | não |
+| Vitor Rivas Cardoso | 556404 | 3ESPH | VitorCardoso_RM556404 | não |
 
-A aplicação segue uma separação clara de responsabilidades entre **Controllers**, **Services**, **DTOs**, **Entidades de Domínio** e **Camada de Dados (`DbContext`)**, utilizando programação assíncrona (`async`/`await`) e **Entity Framework Core**.
+A mesma identificação está em `src/CitizenTech.Zeladoria.Api/equipe.json`, que é o arquivo lido pela API em `GET /api/equipe` e validado na inicialização. Ela também aparece nos metadados `EQUIPERM`/`EXECUTOR` gravados no banco. Os testes registrados nas evidências foram executados por **VitorCardoso_RM556404**.
 
-| Camada / Componente | Tecnologia / Abordagem | Responsabilidade |
-| :--- | :--- | :--- |
-| **Runtime & Framework** | **.NET 10 / ASP.NET Core Web API** | Exposição dos endpoints REST, roteamento, *model binding* (`[FromForm]`, `[FromBody]`) e respostas HTTP |
-| **Acesso a Dados** | **Entity Framework Core (In-Memory)** | Mapeamento de entidades, consultas LINQ assíncronas e controle de transações |
-| **Upload & Mídia** | **`IFormFile` + `MemoryStream` (`byte[]`)** | Recebimento via `multipart/form-data`, leitura em memória, persistência de bytes e metadados técnicos |
-| **Contratos (DTOs)** | **`OcorrenciaDtos.cs`** | Desacoplamento entre entrada/saída da API e entidades internas do domínio |
-| **Documentação** | **Swagger / OpenAPI** | Exploração interativa dos contratos e testes manuais dos endpoints |
-| **Testes** | **Projeto de Testes Automatizados** | Validação de comportamentos, regras de negócio, fluxos transacionais e casos de erro |
+## Ambiente real utilizado (E02)
 
-## 🗄️ 2. Banco de Dados *(In-Memory)*
+| Item | Versão efetiva | Evidência |
+|---|---|---|
+| Windows | Windows 11 Home 10.0.26300 (64 bits) | `evidencias/E02_01_Ambiente_Versoes.txt` |
+| .NET SDK / TargetFramework | SDK 10.0.404, runtime 10.0.15 / `net10.0` | `E02_01` |
+| EF Core / provider | Microsoft.EntityFrameworkCore.SqlServer 10.0.15 | `E02_01` (dotnet list package) |
+| Banco | **Microsoft SQL Server 2022 Express LocalDB 16.0.1000.6**, instância `(localdb)\MSSQLLocalDB`, banco `GS_CSHARP_ZELADORIA` | `E02_02_SQL_00_Verificar_Ambiente.txt` |
+| Modelagem | diagrams.net (draw.io web), arquivo `modelo/Zeladoria_Modelo.drawio` | `E03_04_Modelo_na_Ferramenta_diagrams.net.png` |
+| Cliente HTTP | cliente C# próprio + curl.exe 8.x (Windows) + `testes/api.http` | `E04`–`E08` |
+| IDE | Visual Studio 2026 (projeto original do líder) e .NET CLI + terminal PowerShell (execução das evidências) | — |
 
-O domínio é estruturado em **cinco entidades principais inter-relacionadas**, com chaves primárias (`PK`), chaves estrangeiras (`FK`) e cardinalidades definidas:
+## Estrutura do ZIP
 
-- **Ocorrencias (Entidade Central):** Registro principal da demanda urbana (`Id`, `Titulo`, `Descricao`, `Endereco`, `DataRegistro`), vínculos (`CategoriaId`, `StatusId`, `UsuarioId`) e mídia binária com metadados (`ImagemDados`, `ImagemNome`, `ImagemTipo`, `ImagemTamanho`).
-- **Categorias:** Tipo da demanda urbana (ex.: *Iluminação Pública*, *Pavimentação*, *Limpeza Urbana*).
-- **StatusOcorrencias:** Etapa do fluxo operacional (ex.: *Aberta*, *Em andamento*, *Concluída*).
-- **Usuarios:** Solicitantes e operadores vinculados às ocorrências e aos comentários.
-- **Comentarios:** Histórico de atualizações e observações técnicas de cada ocorrência.
-
-> **Observação sobre Persistência em Memória:** Este projeto utiliza banco de dados em memória do EF Core para agilidade em desenvolvimento e execução de testes. Por residir na memória volátil do processo, os dados e registros criados durante uma execução são descartados ao encerrar ou reiniciar a aplicação.
-
-<div align="center">
-  <img width="769" height="331" alt="tabelas-de-dominio-database" src="https://github.com/user-attachments/assets/001fb7b4-d035-4f2b-bb61-ec4926333327" />
-  <p><em>Figura 1 — Tabelas de domínio populadas via Seed no banco de dados em memória (EF Core).</em></p>
-</div>
-
-
-
-## ⚙️ 3. Ambiente e Execução *(Setup)*
-> Guia rápido de configuração do ambiente, compilação e inicialização da API localmente.
-
-### 3.1 Clonar o repositório
-Clone o repositório para o seu diretório de desenvolvimento local:
-```bash
-git clone [https://github.com/MAJE-Dev/citizentech-zeladoria-api.git](https://github.com/MAJE-Dev/citizentech-zeladoria-api.git)
-cd citizentech-zeladoria-api
+```
+GS_CSHARP_KaioSouza_RM556095/
+├── README.md                  (este arquivo: ficha, equipe e como executar)
+├── prompts.md                 (uso de IA, finalidade e validação)
+├── src/
+│   ├── CitizenTech.Zeladoria.slnx
+│   ├── CitizenTech.Zeladoria.Api/      (Web API: Program.cs, Modelos.cs, Dados/AppDb.cs, Controllers/, equipe.json)
+│   ├── CitizenTech.Zeladoria.Cliente/  (cliente HTTP C#: consome o mesmo contrato)
+│   └── CitizenTech.Zeladoria.Tests/    (xUnit: validações)
+├── modelo/      (Zeladoria_Modelo.drawio editável, .png exportado, .dbml, DICIONARIO_DADOS.md)
+├── sql/sqlserver/  (00_Verificar_Ambiente, 01_Criar_Estrutura, 02_Carga_Ficticia, 03_Verificar_Resultados, 04_Demo_Transacao, Executar-Sql.ps1)
+├── testes/      (Executar-Roteiro-T01-T10.ps1, api.http, saida/ com logs reais da API)
+├── docs/relatorio.pdf         (D03 preenchido)
+├── evidencias/  (indice.md + E01…E09)
+└── amostras/    (imagem de teste, ícone ODS 11, Gerar-Amostras.ps1, CREDITOS.md)
 ```
 
-### 3.2 Restaurar e compilar as dependências
-Restaure os pacotes `NuGet` e execute a compilação da solução:
-```bash
-dotnet restore
-dotnet build
+## Como executar (reprodução)
+
+Todos os comandos são para o **Windows PowerShell**, a partir da pasta raiz extraída (`Set-Location` para ela). Não presumimos SDK nem instância: confira o inventário primeiro.
+
+### 1. Inventário
+
+```powershell
+dotnet --list-sdks
+Get-Command curl.exe
+sqllocaldb info
 ```
 
-### 3.3 Execute a aplicação:
-Inicie o servidor de desenvolvimento da API:
-```bash
-dotnet run
+### 2. Banco (SQL Server)
+
+Crie um banco acadêmico **vazio** chamado `GS_CSHARP_ZELADORIA`, pelo SSMS (New Database) ou pelo comando abaixo. A instância `(localdb)\MSSQLLocalDB` é a que usamos. Se a sua for outra, troque o `-Servidor`.
+
+```powershell
+.\sql\sqlserver\Executar-Sql.ps1 -Banco master -Consulta "CREATE DATABASE GS_CSHARP_ZELADORIA"
 ```
 
-Após iniciar, abra o **Swagger** no endereço exibido no cmd (ex: `http://localhost:5xxx/swagger`).
+Execute os scripts **em ordem: 00 → 01 → 02 → 03**, no SSMS (com o banco selecionado) ou pelo executor incluído:
 
+```powershell
+.\sql\sqlserver\Executar-Sql.ps1 -Arquivo .\sql\sqlserver\00_Verificar_Ambiente.sql
+.\sql\sqlserver\Executar-Sql.ps1 -Arquivo .\sql\sqlserver\01_Criar_Estrutura.sql
+.\sql\sqlserver\Executar-Sql.ps1 -Arquivo .\sql\sqlserver\02_Carga_Ficticia.sql
+.\sql\sqlserver\Executar-Sql.ps1 -Arquivo .\sql\sqlserver\03_Verificar_Resultados.sql
+```
 
-## 📌 4. Endpoints da API
-> Referência das rotas REST disponíveis para cadastro, consulta, atualização e remoção de ocorrências urbanas + **Evidências de execução da aplicação**. ***Observação:*** Os endpoints `POST /api/Ocorrencias` e `POST /api/Ocorrencias/transacional` utilizam `[FromForm]` (`multipart/form-data`) para permitir o envio de campos e arquivo de imagem (`IFormFile`) na mesma requisição.
+A linha de base esperada é: 2 regiões, 3 categorias, 3 ocorrências, 0 imagens, 0 atendimentos, e a ocorrência 1 com **20,000 m²** pendentes. O `04_Demo_Transacao.sql` é uma demonstração SQL **separada**: rode-o num banco próprio (por exemplo, `GS_CSHARP_ZELADORIA_DEMO` criado com 01+02), nunca no banco do roteiro da API. Para recomeçar do zero, use um banco novo e vazio. Os scripts não apagam nada automaticamente.
 
-- ***Observação:***  O endpoint **`POST /api/Ocorrencias/transacional`** executa uma operação composta (por exemplo, criação da ocorrência e registro inicial de comentário) dentro de uma transação explícita do EF Core:
+### 3. Conexão segura (fora do ZIP)
 
-* **Sucesso (`simularErro=false`):** Ambas as gravações são confirmadas de forma atômica (**`Commit`**).
-* **Falha simulada (`simularErro=true`):** Uma exceção é disparada após a preparação/escrita inicial, acionando o **`Rollback`** e garantindo que nenhuma das alterações seja mantida no banco.
+A string de conexão **não** está em nenhum arquivo entregue (`appsettings.json` tem `"Banco": ""`). Configure-a com user-secrets. O exemplo usa autenticação do Windows, sem senha:
 
+```powershell
+dotnet user-secrets set 'ConnectionStrings:Banco' 'Server=(localdb)\MSSQLLocalDB;Database=GS_CSHARP_ZELADORIA;Trusted_Connection=True;Encrypt=True;TrustServerCertificate=True' --project src/CitizenTech.Zeladoria.Api
+```
 
+### 4. Restaurar, compilar, testar e executar a API
 
-### 🟢 4.1 Cadastrar Ocorrência (`POST/api/Ocorrencias`)
-Registra uma nova ocorrência urbana no sistema.
-* **Retorno de sucesso:** `201 Created`
+```powershell
+dotnet restore src/CitizenTech.Zeladoria.slnx
+dotnet build src/CitizenTech.Zeladoria.slnx
+dotnet test src/CitizenTech.Zeladoria.Tests
+$env:ASPNETCORE_ENVIRONMENT = 'Development'
+dotnet run --project src/CitizenTech.Zeladoria.Api --no-launch-profile --urls http://localhost:5080
+```
 
-<div align="center">
-  <img width="1276" height="764" alt="post-method-log" src="https://github.com/user-attachments/assets/87966bf0-07d3-40f5-a5bd-da68afb3a305" />
-  <p><em>Figura 2 — Execução do endpoint POST e logs da aplicação durante o registro da ocorrência.</em></p>
-</div>
+Deixe esse terminal aberto. Em `Development` existem o Swagger (`http://localhost:5080/swagger`) e a falha didática controlada (`simularFalha`). Fora desse ambiente, a API rejeita a simulação.
 
+### 5. Cliente HTTP (outro terminal)
 
-### 🔵 4.2 Listar Ocorrências (`GET/api/Ocorrencias`)
-Retorna a listagem de todas as ocorrências registradas (suporta filtros por `categoria` e `status`).
-* **Retorno de sucesso:** `200 OK`
+```powershell
+dotnet run --project src/CitizenTech.Zeladoria.Cliente -- equipe
+dotnet run --project src/CitizenTech.Zeladoria.Cliente -- enviar-imagem 1 .\amostras\buraco_poste_apagado_mooca.jpg "Buraco com agua" VitorCardoso_RM556404
+dotnet run --project src/CitizenTech.Zeladoria.Cliente -- baixar-imagem 100 .\recuperada.jpg --abrir
+dotnet run --project src/CitizenTech.Zeladoria.Cliente -- atender 1 3 EQ_ZEL_MOOCA_01 VitorCardoso_RM556404
+dotnet run --project src/CitizenTech.Zeladoria.Cliente -- atender 1 2 EQ_ZEL_MOOCA_01 VitorCardoso_RM556404 --simular-falha
+```
 
-<div align="center">
-  <img width="1134" height="824" alt="get-method-log" src="https://github.com/user-attachments/assets/b1ac0b0b-b979-4fe2-b8d9-405c4da135ec" />
-  <p><em>Figura 3 — Execução do endpoint GET e logs da aplicação na consulta de ocorrências.</em></p>
-</div>
+Troque o executor pelo seu NomeAluno_RM. O ID da imagem é o que a API devolver.
 
+### 6. Roteiro real T01–T10 (gera as evidências)
 
-### 🔵 4.3 Listar Ocorrência por ID (`GET/api/Ocorrencias/{id}`)
-Consulta os detalhes de uma ocorrência específica pelo seu identificador único.
-* **Retorno de sucesso:** `200 OK`
+Com o banco na linha de base e a API **parada** (o roteiro inicia, reinicia e para a API sozinho):
 
-<div align="center">
-  <img width="1135" height="660" alt="get-id-method-log" src="https://github.com/user-attachments/assets/0570cd82-ecee-49de-b34b-196b34a14a32" />
-  <p><em>Figura 4 — Consulta de ocorrência por ID via GET e logs correspondentes da aplicação.</em></p>
-</div>
+```powershell
+dotnet build src/CitizenTech.Zeladoria.slnx
+.\testes\Executar-Roteiro-T01-T10.ps1 -Executor 'VitorCardoso_RM556404'
+```
 
+O roteiro grava `evidencias/E04…E08` e um resumo esperado × observado (`E08_00`). Para testes manuais, use `testes/api.http` (VS Code REST Client / Visual Studio) ou o Swagger.
 
-### 🟢 4.4 Criação Transacional — Commit (`POST/api/Ocorrencias/transacional?simularErro=false`)
-#### Cenário 1 — `simularErro=false` (201 Created / Commit)
-- Confirma e persiste todas as operações da transação de forma atômica, retornando os dados da ocorrência criada.
+## Contrato da API
 
-<div align="center">
-  <img width="1136" height="658" alt="post-method-commit-log" src="https://github.com/user-attachments/assets/52dcd01e-b956-4759-8689-a26577227b76" />
-  <p><em>Figura 5 — Execução de operação transacional com confirmação (Commit) e logs da aplicação.</em></p>
-</div>
+| Operação | Método e rota | Entrada | Resposta |
+|---|---|---|---|
+| Identificação acadêmica | `GET /api/equipe` | — | 200 JSON (CitizenTech, turma, líder, integrantes) |
+| Consultas do domínio | `GET /api/regioes`, `GET /api/categorias`, `GET /api/ocorrencias?regiaoId=&categoriaId=&situacao=`, `GET /api/ocorrencias/{id}` | query/rota | 200 JSON; 404 ProblemDetails |
+| Registrar ocorrência | `POST /api/ocorrencias` | JSON `{regiaoId, categoriaId, titulo, descricao, endereco, unidade, quantidadeEstimada, executor}` | 201 + Location; 400 |
+| Upload de imagem | `POST /api/ocorrencias/{ocorrenciaId}/imagens` | multipart: `Arquivo`, `Titulo`, `Executor` | 201 com ID e metadados; 400 / 404 / 413 / 415 |
+| Metadados | `GET /api/imagens/{id}` · `GET /api/ocorrencias/{id}/imagens` | ID | 200 JSON (sem bytes); 404 |
+| Conteúdo | `GET /api/imagens/{id}/conteudo` | ID | 200 bytes `image/jpeg`/`image/png`, cabeçalhos `X-Origem-Imagem` e `X-Imagem-SHA256`; 404 |
+| **Transação** | `POST /api/ocorrencias/{id}/atendimentos` | JSON `{quantidade, equipeCampoCodigo, executor, simularFalha}` | 201 `COMMIT`; 409 `ROLLBACK` ou pendente insuficiente; 400; 404 |
+| Histórico | `GET /api/ocorrencias/{id}/atendimentos` | ID | 200 JSON |
 
+Os erros vêm em **ProblemDetails** (`application/problem+json`). Banco indisponível retorna **503**, sem stack trace e sem string de conexão.
 
-### 🟢 4.5 Criação Transacional — Rollback (`POST/api/Ocorrencias/transacional?simularErro=false`)
-#### Cenário 2 — `simularErro=true` (400 Bad Request / Rollback):
-- Simula uma falha após o início da operação e reverte toda a transação, sem deixar registros parciais:
+**Transação (R6):** `AtendimentosController.Registrar` abre `BeginTransactionAsync` e faz duas escritas: (1) `UPDATE OCORRENCIA` condicional (`ExecuteUpdateAsync`), que baixa o pendente e ajusta a situação; (2) `INSERT ATENDIMENTO_OCORRENCIA` (`SaveChangesAsync`). Depois vem `CommitAsync`. Com `simularFalha`, a exceção acontece **depois** das duas escritas e o `RollbackAsync` desfaz as duas.
 
-<div align="center">
-  <img width="1136" height="602" alt="post-method-rollback-log" src="https://github.com/user-attachments/assets/a2c43c63-dbbf-4a0f-8f25-791e1ddee8e9" />
-  <p><em>Figura 6 — Execução de operação transacional com falha simulada, reversão (Rollback) e logs da aplicação.</em></p>
-</div>
+## Resultados T01–T10 (observados em 25/11/2026)
 
+| T | Resultado observado | Situação | Evidência |
+|---|---|---|---|
+| T01 | GETs 200. POST ocorrência 201. Upload 201 com **ID 100**. SQL: `DATALENGTH` 52484 = arquivo, SHA-256 do SQL = original | aprovado | E04_01, E04_02 |
+| T02 | API parada (PID 22292), reiniciada (PID 24984). GET 200 no ID 100. Hash recuperado = original. Imagem exibida pelo navegador a partir da URL da API | aprovado | E05_01, E05_02 |
+| T03 | Sem arquivo, 0 bytes e título vazio: 400 com mensagem. Imagens 1 → 1 | aprovado | E08_01 |
+| T04 | GIF 415, PNG com texto 415, 2,5 MiB 413. Nenhum registro novo | aprovado | E08_02 |
+| T05 | Imagem 999999: 404 (metadados e conteúdo). Upload para ocorrência 999999: 404. Cliente segue utilizável | aprovado | E08_03 |
+| T06 | Quantidade 0, -5 e 1.2345: 400. 999: 409. Executor intruso: 400. Ocorrência inexistente: 404. Pendente segue 20,000 e 0 atendimentos | aprovado | E08_04 |
+| T07 | 20,000/0 → **COMMIT** → 17,000/1 (EM_ATENDIMENTO) | aprovado | E06_01 |
+| T08 | 17,000/1 → falha após UPDATE+INSERT (ID provisório 101) → **ROLLBACK** → 17,000/1 | aprovado | E07_01 |
+| T09 | Modelo aberto no diagrams.net. Relatório e mapa de requisitos/código | aprovado | E03_04, E09, docs/relatorio.pdf |
+| T10 | API parada: cliente mostra "[ERRO DE COMUNICAÇÃO]" (exit 2) e o banco não muda. Depois do reinício, 200 | aprovado | E08_05 |
 
-### 🟠 4.6 Atualizar Status da Ocorrência (`PATCH/api/Ocorrencias/{id}/status`)
-Atualiza os dados ou o status de uma ocorrência existente.
-- Retorno esperado **(200 OK):**
+Resumo automático: **54 verificações, 0 divergências** (`E08_00`). A primeira execução encontrou 2 divergências, que foram corrigidas e documentadas em `E09_02`.
 
-***Obs:*** *Retorna a ocorrência com o status atualizado (ou `404 Not Found` caso o ID da ocorrência ou status seja inválido/inexistente).*
+## Documentos
 
-<div align="center">
-  <img width="1134" height="658" alt="patch-method-id-log" src="https://github.com/user-attachments/assets/12d4b897-1b30-4a3c-aadb-558d2a930adb" />
-  <p><em>Figura 7 — Atualização de status da ocorrência por ID via PATCH e logs da aplicação.</em></p>
-</div>
+- Relatório D03 preenchido: [`docs/relatorio.pdf`](docs/relatorio.pdf)
+- Índice de evidências (E01–E09, T e R): [`evidencias/indice.md`](evidencias/indice.md)
+- Modelo e dicionário: [`modelo/`](modelo/)
+- Uso de IA: [`prompts.md`](prompts.md)
+- Fontes e créditos de imagens: [`amostras/CREDITOS.md`](amostras/CREDITOS.md)
 
-
-### 🔴 4.7 Remover Ocorrência (`DELETE/api/ocorrencias/{id}`)
-Remove uma ocorrência do sistema.
-* **Retorno de sucesso:** `204 No Content`
-
-<div align="center">
-  <img width="1138" height="672" alt="delete-method-id-log" src="https://github.com/user-attachments/assets/069f469c-ece9-4d15-a9f2-7f1f3c055b23" />
-  <p><em>Figura 8 — Remoção de ocorrência por ID via DELETE e logs da aplicação.</em></p>
-</div>
-
-
-## 🛡️ 5. Validações e Tratamento de Falhas
-> Tratamento de requisições malformadas, exceções da aplicação e consistência de dados.
-
-
-A API centraliza o tratamento de exceções e aplica validações preventivas para garantir respostas HTTP previsíveis, segurança no upload de arquivos e integridade dos dados:
-
-- **Dados e regras de domínio (`400 Bad Request`):** Bloqueia requisições com campos obrigatórios ausentes, formatos inválidos ou violação de regras de negócio antes da persistência.
-- **Upload e processamento de imagem (`400 Bad Request`):** Valida arquivo vazio, tipo MIME não permitido e limite de tamanho antes da conversão e manipulação binária (`byte[]`).
-- **Recursos não encontrados (`404 Not Found`):** Retorna erro padronizado quando o `id` informado (ocorrência, categoria ou status) não existe na base.
-- **Resiliência e consistência transacional:** Exceções não tratadas são interceptadas de forma centralizada — evitando exposição de detalhes internos — e falhas em operações transacionais acionam `Rollback`, impedindo gravações parciais ou estados inconsistentes.
-
-
-## 🧪 6. Testes Automatizados *(Build)*
-> Validação automatizada das regras de negócio, garantia de qualidade e integridade da camada de serviços utilizando xUnit.
-
-Os testes funcionais e de integração foram executados diretamente através da interface do **Swagger UI** utilizando a base de dados *In-Memory* populada via *Seed*, validando tanto os fluxos principais de CRUD quanto o armazenamento/consulta de imagens, validações de entrada e operações atômicas.
-
-| ID | Cenário / Descrição do Teste | Endpoint | Resultado Esperado | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **T01** | Listar ocorrências (geral e com filtros por Categoria/Status) | `GET/api/Ocorrencias?categoriaId=1` | `200 OK` (Lista de ocorrências filtrada) | ✅ Aprovado |
-| **T02** | Obter ocorrência existente por ID | `GET/api/Ocorrencias/{id}` | `200 OK` (Dados e metadados da ocorrência) | ✅ Aprovado |
-| **T03** | Tentar obter ocorrência com ID inexistente | `GET/api/Ocorrencias/999` | `404 Not Found` | ✅ Aprovado |
-| **T04** | Criar nova ocorrência com upload de imagem (`multipart/form-data`) | `POST/api/Ocorrencias` | `201 Created` (Bytes e metadados salvos) | ✅ Aprovado |
-| **T05** | Consultar imagem da ocorrência por ID e tamanho | `GET/api/Ocorrencias/{id}/imagem` | `200 OK` (Retorno binário + tamanho em bytes) | ✅ Aprovado |
-| **T06** | Tentar criar ocorrência com dados ou arquivo inválidos | `POST/api/Ocorrencias` | `400 Bad Request` (Erros de validação) | ✅ Aprovado |
-| **T07** | Atualizar status de uma ocorrência existente | `PATCH/api/Ocorrencias/{id}/status` | `200 OK` (Ocorrência atualizada) | ✅ Aprovado |
-| **T08** | Remover uma ocorrência com sucesso | `DELETE/api/Ocorrencias/{id}` | `204 No Content` | ✅ Aprovado |
-| **T09** | Executar operação transacional com sucesso (`Commit`) | `POST/api/Ocorrencias/transacional?simularErro=false` | `201 Created` (Ocorrência e comentário gravados) | ✅ Aprovado |
-| **T10** | Executar operação transacional com falha simulada (`Rollback`) | `POST/api/Ocorrencias/transacional?simularErro=true` | `400 Bad Request` (Operação revertida sem persistência) | ✅ Aprovado |
-
-### 6.1 Explicação Técnica: 
-- **Persistência Binária e Consulta de Imagem (T04 e T05):** No envio via `multipart/form-data`, o arquivo `IFormFile` é convertido para `byte[]` e armazenado junto aos seus metadados técnicos (nome, tipo MIME e tamanho). A consulta por ID devolve o conteúdo binário e o tamanho correspondente.
-- **Consistência Transacional (T09 e T10):** Ao executar o endpoint transacional com `simularErro=false`, a ocorrência e o comentário inicial são persistidos em conjunto (`Commit`). Com `simularErro=true`, a exceção simulada interrompe o fluxo e aciona a reversão (`Rollback`), garantindo que nenhum registro parcial seja gravado na base em memória.
-- **Blindagem de Entrada (T06):** O envio de campos obrigatórios vazios, IDs inválidos ou arquivos fora do padrão é interceptado pelas *Data Annotations* nos DTOs e regras de validação, devolvendo `400 Bad Request` com mensagens claras antes de alterar o estado da base.
-
-
-<div align="center">
-  <img width="1045" height="914" alt="testes-automatizados" src="https://github.com/user-attachments/assets/85402327-699f-4940-aa85-3145c3fd4835" />
-  <p><em>Figura 9 — Execução e resultado da suíte de testes automatizados da aplicação.</em></p>
-</div>
-
-
-<div align="center">
-  <p>© 2026 MajeDev — CitizenTech Zeladoria (Global Solution 2026). Todos os direitos reservados.</p>
-</div>
+**Credenciais:** nenhum arquivo do ZIP contém senha ou string de conexão. As pastas `bin/`, `obj/` e `.vs/` não são entregues.

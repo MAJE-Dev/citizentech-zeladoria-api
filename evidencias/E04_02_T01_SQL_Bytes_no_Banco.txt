@@ -1,0 +1,16 @@
+﻿
+====================================================================================================
+T01/E04 - Consulta SQL comprova bytes reais, ID e metadados da imagem gravada
+Data/hora: 2026-11-25 19:57:08 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Arquivo original: amostras\buraco_poste_apagado_mooca.jpg | 52484 bytes | SHA-256 D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E
+-- 2026-11-25 19:57:08 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ ID OCORRENCIAID TITULO                                    NOMEARQUIVO                    MIME       TAMANHOBYTES BYTES_NO_BANCO SHA256_CALCULADO_PELO_SQL                                        INICIO_JPEG EQUIPERM
+ -- ------------ ------                                    -----------                    ----       ------------ -------------- -------------------------                                        ----------- --------
+100            1 Buraco com agua e postes apagados - Mooca buraco_poste_apagado_mooca.jpg image/jpeg        52484          52484 D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E 0xFFD8FFE0  556095  
+
+
+
+    => Verificação: DATALENGTH(DADOS) = 52484 = tamanho do arquivo original (52484) | CONFERE
+    => Verificação: SHA-256 calculado pelo SQL Server = SHA-256 do arquivo original | CONFERE

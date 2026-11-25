@@ -1,0 +1,88 @@
+﻿
+====================================================================================================
+T06 - POST transacional com quantidade zero/negativa, saldo insuficiente e executor não cadastrado | E08
+Data/hora: 2026-11-25 19:57:14 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: 400/409 documentados; sem redução do pendente e sem novo atendimento. (Rejeições ANTES de escrever comprovam C6, não rollback.)
+
+--- Banco ANTES -------------------------------------------------------------------------------
+-- 2026-11-25 19:57:14 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ID QUANTIDADEESTIMADA QUANTIDADEPENDENTE SITUACAO ATENDIMENTOS QTD_ATENDIDA ATENDIMENTOS_TOTAL
+-- ------------------ ------------------ -------- ------------ ------------ ------------------
+ 1             20.000             20.000 ABERTA              0        0.000                  0
+
+
+
+
+    corpo JSON enviado: {"quantidade":0,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"VitorCardoso_RM556404"}
+
+>>> quantidade 0
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_7c5bf0b8.json
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Quantidade inválida","status":400,"detail":"Quantidade deve ser positiva, com até 3 casas decimais.","traceId":"00-3a387e4c97b93c2fa763bfc09ced5fa9-019998573e82827f-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+    corpo JSON enviado: {"quantidade":-5,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"VitorCardoso_RM556404"}
+
+>>> quantidade negativa (-5)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_57b16509.json
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Quantidade inválida","status":400,"detail":"Quantidade deve ser positiva, com até 3 casas decimais.","traceId":"00-17c54f404856924ff36bfe18ff0b0c58-93fe6187675a1b7d-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+    corpo JSON enviado: {"quantidade":1.2345,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"VitorCardoso_RM556404"}
+
+>>> quantidade com 4 casas (1.2345)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_5c48c921.json
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Quantidade inválida","status":400,"detail":"Quantidade deve ser positiva, com até 3 casas decimais.","traceId":"00-94b3a81a8fddf8f3a2c42c0102522fba-60a5eac770e338eb-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+    corpo JSON enviado: {"quantidade":999,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"VitorCardoso_RM556404"}
+
+>>> saldo insuficiente (999 > pendente)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_a463f94c.json
+    HTTP/1.1 409 Conflict
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.10","title":"Quantidade indisponível","status":409,"detail":"Pendente atual: 20,000 m2 (situação ABERTA). Nenhum atendimento foi gravado.","traceId":"00-0184115d7386f1ca170295e88c84373a-c7ef053d80438e71-00"}
+    => Esperado HTTP 409 | Observado HTTP 409 | CONFERE
+
+    corpo JSON enviado: {"quantidade":1,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"Intruso_RM000000"}
+
+>>> executor não cadastrado (Intruso_RM000000)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_1c958ff0.json
+    HTTP/1.1 400 Bad Request
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"Executor inválido","status":400,"detail":"Executor não pertence à equipe (use NomeAluno_RM de equipe.json).","traceId":"00-7acd7b7d56fde9d60915821c7d0f5ed9-74695aa2fef2dbf7-00"}
+    => Esperado HTTP 400 | Observado HTTP 400 | CONFERE
+
+    corpo JSON enviado: {"quantidade":1,"equipeCampoCodigo":"EQ_ZEL_MOOCA_01","executor":"VitorCardoso_RM556404"}
+
+>>> ocorrência inexistente (999999)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/999999/atendimentos -H Content-Type: application/json --data-binary @C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\corpo_4ff8104d.json
+    HTTP/1.1 404 Not Found
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Ocorrência inexistente","status":404,"detail":"Não existe ocorrência 999999; nada foi gravado.","traceId":"00-fa60a940f36b2ca905db1b83e8923dfa-4a29b4dfe37f5358-00"}
+    => Esperado HTTP 404 | Observado HTTP 404 | CONFERE
+
+--- Banco DEPOIS ------------------------------------------------------------------------------
+-- 2026-11-25 19:57:15 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ID QUANTIDADEESTIMADA QUANTIDADEPENDENTE SITUACAO ATENDIMENTOS QTD_ATENDIDA ATENDIMENTOS_TOTAL
+-- ------------------ ------------------ -------- ------------ ------------ ------------------
+ 1             20.000             20.000 ABERTA              0        0.000                  0
+
+
+
+    => Verificação: Pendente da ocorrência 1 continua 20.000 | CONFERE
+    => Verificação: Nenhum atendimento gravado | CONFERE

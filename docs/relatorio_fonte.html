@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>Relatório GS 2026.2 C# — Zeladoria API Urbana — KaioSouza_RM556095</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm 16mm 14mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; color: #1a1a1a; line-height: 1.42; }
+  h1 { font-size: 22pt; margin: 0 0 2px; }
+  h2 { font-size: 14pt; margin: 18px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #e6007e; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12px 0 4px; page-break-after: avoid; }
+  .marca { color: #e6007e; font-weight: 700; font-size: 9pt; letter-spacing: .5px; }
+  .sub { color: #e6007e; font-size: 13pt; margin: 0 0 6px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; font-size: 9.3pt; page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+  th { background: #1a1a1a; color: #fff; text-align: left; padding: 4px 6px; }
+  td { border-bottom: 1px solid #ddd; padding: 3px 6px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f3f5; }
+  code { font-family: Consolas, monospace; font-size: 8.8pt; background: #f2f2f2; padding: 0 2px; }
+  .ok { color: #0a7a2f; font-weight: 700; }
+  .caixa { border: 1px solid #ccc; border-left: 4px solid #e6007e; padding: 6px 10px; margin: 8px 0; background: #fafafa; }
+  .fig { text-align: center; margin: 8px 0; page-break-inside: avoid; }
+  .fig img { max-width: 100%; border: 1px solid #bbb; }
+  .fig .leg { font-size: 8.5pt; color: #555; }
+  .arq { display: flex; gap: 6px; align-items: stretch; justify-content: center; margin: 8px 0; font-size: 9pt; }
+  .arq div { border: 2px solid #1a1a1a; padding: 6px; border-radius: 4px; width: 30%; }
+  .arq .seta { border: none; width: auto; align-self: center; font-size: 16pt; color: #e6007e; }
+  .t { page-break-inside: avoid; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="marca">FIAP · GLOBAL SOLUTION 2026.2 · C# SOFTWARE DEVELOPMENT</div>
+<h1>Zeladoria API Urbana</h1>
+<p class="sub">Relatório da equipe (modelo D03 preenchido) · Turma 3ESPH</p>
+<p>Professor Angel Antonio Gonzalez Martinez · Uso acadêmico — FIAP — Global Solution 2026.2</p>
+
+<h2>1 Identificação acadêmica e entrega</h2>
+<p><b>CitizenTech:</b> Zeladoria API Urbana. <b>Turma:</b> 3ESPH. <b>Líder e RM:</b> Kaio Drago Lima Souza, RM556095.
+<b>Data da execução dos testes:</b> 25/11/2026 (19:56–19:58, horário de Brasília). <b>Nome-base do ZIP/pasta:</b> <code>GS_CSHARP_KaioSouza_RM556095</code>.
+<b>Professor:</b> Angel Antonio Gonzalez Martinez.</p>
+<table>
+<tr><th>Nome completo real</th><th>RM</th><th>Turma</th><th>NomeAluno_RM</th><th>Líder</th></tr>
+<tr><td>Kaio Drago Lima Souza</td><td>556095</td><td>3ESPH</td><td>KaioSouza_RM556095</td><td>sim</td></tr>
+<tr><td>Gustavo Viega Martins</td><td>555885</td><td>3ESPH</td><td>GustavoMartins_RM555885</td><td>não</td></tr>
+<tr><td>Gustavo Yuji Osugi</td><td>555034</td><td>3ESPH</td><td>GustavoOsugi_RM555034</td><td>não</td></tr>
+<tr><td>Otávio Santos de Lima Ferrão</td><td>556452</td><td>3ESPH</td><td>OtavioFerrao_RM556452</td><td>não</td></tr>
+<tr><td>Vitor Rivas Cardoso</td><td>556404</td><td>3ESPH</td><td>VitorCardoso_RM556404</td><td>não</td></tr>
+</table>
+<p>Todos os integrantes são da turma 3ESPH e formam a mesma equipe da CitizenTech nas demais disciplinas da GS. A mesma identificação está em
+<code>src/CitizenTech.Zeladoria.Api/equipe.json</code> (validado ao iniciar a API e exposto em <code>GET /api/equipe</code>), no README e nos metadados
+<code>EQUIPERM</code>/<code>EXECUTOR</code> gravados pela API. Executor das evidências: <b>VitorCardoso_RM556404</b>.</p>
+
+<h2>2 Problema cidadão e ODS — R1 / E01</h2>
+<table style="width:auto;float:right;margin:0 0 6px 12px"><tr><td style="text-align:center;border:none">
+<img src="../amostras/ODS11_icone_oficial_ONU_ptBR.svg" style="width:110px"><br><span style="font-size:7.5pt;color:#555">Ícone oficial ODS 11 © Nações Unidas</span></td></tr></table>
+<p><b>Cidadão beneficiado:</b> pedestres, moradores e usuários de transporte público que dependem de vias e calçadas seguras, sobretudo no trajeto a pé até o ponto de ônibus à noite.
+<b>Problema:</b> buracos e postes apagados ficam meses sem reparo; quem abre protocolo não vê o andamento ("só dizem que está em análise").
+<b>Território:</b> São Paulo/SP. O recorte piloto é a Mooca (Subprefeitura Mooca); a carga fictícia também tem Vila Mariana.
+<b>Parceiros/ecossistema:</b> cidadãos e associações de bairro (relatam e acompanham); subprefeitura (triagem e ordem de serviço); equipes de conservação viária e de manutenção da iluminação pública (registram atendimentos); canal oficial de solicitações da Prefeitura (ex.: SP156), como integração futura, não implementada.</p>
+<p><b>ODS principal:</b> 11, Cidades e Comunidades Sustentáveis. Meta 11.2: segurança viária para quem anda a pé ou de moto, já que buraco cheio d'água causa quedas. Meta 11.7: espaços públicos seguros, já que a rua escura gera medo.
+<b>Secundários:</b> ODS 9.1 (infraestrutura de qualidade e resiliente) e ODS 16.6 (instituições eficazes e transparentes), porque a situação, o pendente e o histórico ficam visíveis ao cidadão.</p>
+<p><b>Papel da imagem:</b> a foto vinculada à ocorrência (tabela IMAGEM_OCORRENCIA) mostra a gravidade (buraco com água, rua escura), ajuda a triagem e a evitar duplicidade, e serve de registro "antes" para conferir o serviço. Nos testes usamos uma ilustração própria da equipe, que reproduz o cenário relatado.</p>
+<p><b>Indicador proposto — PCR30 (% de ocorrências concluídas em até 30 dias).</b> Unidade: % de ocorrências.
+Fórmula: (ocorrências abertas no mês M que chegaram a <code>CONCLUIDA</code> em até 30 dias de <code>ABERTAUTC</code>) ÷ (ocorrências abertas no mês M) × 100, por região e categoria.
+A data de conclusão é o <code>CRIADOUTC</code> do atendimento que zerou o pendente. Origem futura dos dados: consulta SQL mensal em OCORRENCIA + ATENDIMENTO_OCORRENCIA num piloto com uma subprefeitura. Periodicidade: mensal.
+<b>Limitações:</b> não há medição de impacto. Os dados são fictícios, não há integração com o canal oficial e o sistema não avalia a qualidade do reparo. Quantidades em unidades diferentes (m², pontos de luz, m³) não são somadas entre si.</p>
+
+<h3>Observação e escuta do território</h3>
+<p><b>Data e contexto:</b> 14/11/2026, por volta das 14h30, em via pública na Mooca (São Paulo), numa rua com o problema visível: esquina com buraco e quarteirão com postes apagados no trajeto até o ponto de ônibus. Quem ouviu: Vitor Rivas Cardoso.
+<b>Perfil anônimo:</b> morador/trabalhador adulto que passa pela rua todos os dias para ir trabalhar. Não registramos nome, contato, áudio nem imagem.
+<b>O que ele faz hoje e o que atrapalha:</b> passa pela esquina com um buraco fundo, sem reparo há meses, que enche d'água na chuva e derruba quem não conhece; volta a pé do ponto de ônibus com metade dos postes apagados depois das 19h; já abriu protocolo duas vezes pelo aplicativo e só recebeu "em análise".
+<b>Como o relato orientou a solução:</b> as categorias Pavimentação e Iluminação; a foto vinculada à ocorrência; a situação, o pendente e o histórico de atendimentos visíveis, com baixa atômica (resposta direta ao "em análise"); e o indicador de prazo.
+<b>Pesquisa em outra disciplina:</b> não utilizada nesta entrega. Registro completo: <code>evidencias/E01_01_Registro_Escuta_Mooca_2026-11-14.md</code>. Limitação: foi uma única conversa, sem valor estatístico.</p>
+
+<h2>3 Arquitetura e recorte — R4 / E09</h2>
+<div class="arq">
+  <div><b>Clientes</b><br>CitizenTech.Zeladoria.Cliente (C#, HttpClient, multipart, streams, JSON) · curl.exe · <code>testes/api.http</code> · Swagger (Development)</div>
+  <div class="seta">⇄ HTTP/JSON ⇄</div>
+  <div><b>CitizenTech.Zeladoria.Api</b> (ASP.NET Core, .NET 10)<br>Controllers (Ocorrencias, Imagens, Atendimentos) · validações · ProblemDetails · EF Core 10 / LINQ · transação</div>
+  <div class="seta">⇄ EF Core ⇄</div>
+  <div><b>SQL Server 2022 LocalDB</b><br>GS_CSHARP_ZELADORIA · 5 tabelas · <b>bytes</b> em IMAGEM_OCORRENCIA.DADOS (varbinary(max)) · CHECK/FK</div>
+</div>
+<p><b>Onde ficam as coisas:</b> os bytes ficam na coluna <code>DADOS</code>. Os metadados (título, nome, MIME, tamanho, SHA-256, EQUIPERM, EXECUTOR, data) estão nas colunas da mesma linha e saem em JSON por <code>GET /api/imagens/{id}</code>. As regras de negócio ficam nos controllers (validação de entrada e UPDATE condicional) e se repetem como CHECK no banco.
+<b>Carga inicial:</b> regiões, categorias e três ocorrências fictícias (<code>02_Carga_Ficticia.sql</code>). <b>Fluxos implementados:</b> consulta do domínio, registro de ocorrência, upload e recuperação da imagem, e registro transacional de atendimento.
+<b>POC Windows Forms:</b> não utilizada. <b>Cliente HTTP:</b> console C# próprio + curl + arquivo .http.
+A API é avaliável de forma independente, sem VMs, SSH ou agentes de outras disciplinas, sem serviço pago e sem IA na aplicação.</p>
+
+<h2>4 Ambiente real — R9 / E02</h2>
+<table>
+<tr><th>Item</th><th>Versão/configuração efetiva</th><th>Evidência</th></tr>
+<tr><td>Windows/IDE</td><td>Windows 11 Home 10.0.26300 (64 bits); .NET CLI + PowerShell 5.1 na execução; Visual Studio no projeto original do líder</td><td>evidencias/E02_01_Ambiente_Versoes.txt</td></tr>
+<tr><td>SDK/TargetFramework</td><td>.NET SDK 10.0.404; runtime 10.0.15; <code>net10.0</code></td><td>E02_01</td></tr>
+<tr><td>EF Core/provider</td><td>Microsoft.EntityFrameworkCore.SqlServer 10.0.15</td><td>E02_01 (dotnet list package)</td></tr>
+<tr><td>Banco e versão</td><td>MS SQL Server 2022 Express LocalDB 16.0.1000.6 (RTM)</td><td>E02_02_SQL_00_Verificar_Ambiente.txt</td></tr>
+<tr><td>Servidor/instância</td><td><code>(localdb)\MSSQLLocalDB</code>, banco <code>GS_CSHARP_ZELADORIA</code>, autenticação Windows (sem senha)</td><td>E02_02</td></tr>
+<tr><td>Modelagem e HTTP</td><td>diagrams.net (web); cliente C# próprio; curl 8.23.0; Microsoft Edge (exibição da imagem)</td><td>E03_04, E02_01</td></tr>
+</table>
+<p><b>Build realmente executado</b> em 25/11/2026: <code>dotnet build src\CitizenTech.Zeladoria.slnx</code> terminou com 0 avisos e 0 erros, e <code>dotnet test</code> aprovou 11 de 11 (E02_03).
+<b>Conexão realmente verificada:</b> <code>00_Verificar_Ambiente.sql</code> retornou <code>@@VERSION</code>, banco GS_CSHARP_ZELADORIA, PODE_CRIAR_TABELA = 1 e 0 tabelas existentes (E02_02).</p>
+
+<h2>5 Modelo de banco — R3 / E03</h2>
+<p><b>Ferramenta:</b> diagrams.net (draw.io web). <b>Arquivo editável:</b> <code>modelo/Zeladoria_Modelo.drawio</code>. <b>Exportação:</b> <code>modelo/Zeladoria_Modelo.png</code>.
+<b>Captura da ferramenta:</b> <code>evidencias/E03_04_Modelo_na_Ferramenta_diagrams.net.png</code>. <b>Alternativa lógica:</b> <code>modelo/Zeladoria_Modelo.dbml</code>. <b>Dicionário:</b> <code>modelo/DICIONARIO_DADOS.md</code>.</p>
+<table>
+<tr><th>Tabela</th><th>Responsabilidade no domínio</th><th>PK e FKs</th><th>Relações</th></tr>
+<tr><td>REGIAO</td><td>Território (subprefeitura/bairro)</td><td>PK ID</td><td>1 → 0..N OCORRENCIA</td></tr>
+<tr><td>CATEGORIA_OCORRENCIA</td><td>Tipo do problema (NOME único)</td><td>PK ID</td><td>1 → 0..N OCORRENCIA</td></tr>
+<tr><td>OCORRENCIA</td><td>Problema relatado com <b>saldo</b> de serviço (QUANTIDADEPENDENTE) e SITUACAO</td><td>PK ID; FK REGIAOID, CATEGORIAID</td><td>N:1 região e categoria; 1 → 0..N imagens e 0..N atendimentos</td></tr>
+<tr><td>IMAGEM_OCORRENCIA</td><td>Foto em bytes + metadados técnicos</td><td>PK ID; FK OCORRENCIAID</td><td>N:1 OCORRENCIA</td></tr>
+<tr><td>ATENDIMENTO_OCORRENCIA</td><td>Serviço executado que baixa o pendente</td><td>PK ID; FK OCORRENCIAID</td><td>N:1 OCORRENCIA</td></tr>
+</table>
+<p><b>Tipos e restrições:</b> IDs <code>int IDENTITY(100,1)</code>; textos em <code>nvarchar(n)</code> NOT NULL; quantidades em <code>decimal(12,3)</code>; datas em <code>datetime2(6)</code> UTC; <code>DADOS varbinary(max)</code>; <code>HASHSHA256 char(64)</code>.
+As FKs são obrigatórias no filho, com exclusão restrita (NO_ACTION). Há 7 CHECKs: pendente entre 0 e a estimada; SITUACAO num domínio fechado; CONCLUIDA ⇔ pendente = 0; quantidade &gt; 0; MIME PNG/JPEG; tamanho entre 1 e 2 MiB e igual a <code>DATALENGTH(DADOS)</code>.
+<b>Lógico × físico:</b> o diagrama e o DBML usam os mesmos tipos do SQL Server. Índices nas FKs (<code>IX_*</code>) só existem no físico. Não há versão Oracle, porque escolhemos um único banco.</p>
+<div class="fig"><img src="../modelo/Zeladoria_Modelo.png" style="max-height:470px"><div class="leg">Figura 1 — Exportação do modelo editável (diagrams.net): 5 tabelas, PK/FK, tipos e cardinalidades 1 : 0..N.</div></div>
+
+<h2>6 Contrato e imagem persistente — R4/R5/R7 / E04/E05/E08</h2>
+<table>
+<tr><th>Operação</th><th>Método/rota</th><th>Entrada</th><th>Resposta e código</th></tr>
+<tr><td>Consultas do domínio</td><td>GET /api/equipe · /api/regioes · /api/categorias · /api/ocorrencias?regiaoId&amp;categoriaId&amp;situacao · /api/ocorrencias/{id}</td><td>rota/query</td><td>200 JSON; 404 ProblemDetails</td></tr>
+<tr><td>Registro de ocorrência</td><td>POST /api/ocorrencias</td><td>JSON</td><td>201 + Location; 400</td></tr>
+<tr><td>Upload</td><td>POST /api/ocorrencias/{ocorrenciaId}/imagens</td><td>multipart: Arquivo, Titulo, Executor</td><td>201 JSON com ID; 400 / 404 / 413 / 415</td></tr>
+<tr><td>Metadados</td><td>GET /api/imagens/{id} · GET /api/ocorrencias/{id}/imagens</td><td>ID</td><td>200 JSON sem bytes; 404</td></tr>
+<tr><td>Conteúdo</td><td>GET /api/imagens/{id}/conteudo</td><td>ID</td><td>200 bytes image/jpeg ou image/png + X-Origem-Imagem, X-Imagem-SHA256; 404</td></tr>
+<tr><td>Operação transacional</td><td>POST /api/ocorrencias/{id}/atendimentos</td><td>JSON {quantidade, equipeCampoCodigo, executor, simularFalha}</td><td>201 COMMIT; 409 ROLLBACK ou pendente insuficiente; 400; 404</td></tr>
+</table>
+<p><b>Imagem utilizada:</b> <code>amostras/buraco_poste_apagado_mooca.jpg</code>, uma ilustração própria da equipe gerada por script, sem direitos de terceiros, pertinente ao ODS 11 e vinculada à ocorrência 1.
+<b>Tipo físico da coluna:</b> varbinary(max). <b>ID real gravado:</b> 100.
+<b>Tamanho original / armazenado / recuperado:</b> 52.484 / 52.484 (<code>DATALENGTH(DADOS)</code>) / 52.484 bytes.
+<b>Hash SHA-256:</b> <code>D9562337A538…C91A4E</code>. É igual no arquivo original, no valor calculado pelo próprio SQL Server (<code>HASHBYTES('SHA2_256', DADOS)</code>) e no arquivo recuperado após o reinício (E04_02, E05_01).
+<b>Equipe e executor:</b> nas colunas EQUIPERM = 556095 e EXECUTOR = VitorCardoso_RM556404, na resposta 201 e no cabeçalho de cada evidência.</p>
+<p><b>Reinício e recuperação (T02):</b> a API foi parada (PID 22292) e iniciada como um novo processo (PID 24984). Sem novo upload e sem abrir o arquivo original, <code>GET /api/imagens/100</code> devolveu os metadados. O cliente C#, também um novo processo, baixou <code>/conteudo</code> por stream para <code>testes/saida/recuperada_imagem_100.jpg</code>, com hash igual ao original. O Microsoft Edge exibiu a imagem carregando a URL da API (Figura 2).
+<b>Prévia local × recuperada:</b> a imagem exibida vem da URL <code>http://localhost:5080/api/imagens/100/conteudo</code>, com o cabeçalho <code>X-Origem-Imagem: SQL Server IMAGEM_OCORRENCIA ID=100</code>. Não há pasta de uploads: a API não grava arquivos em disco.</p>
+<div class="fig"><img src="../evidencias/E05_02_T02_Imagem_Exibida_Apos_Reinicio.png" style="max-height:420px"><div class="leg">Figura 2 — E05: imagem ID 100 exibida a partir da API após o reinício (PID 22292 → 24984), com hash igual ao original.</div></div>
+
+<h2>7 Transação — R6 / E06/E07</h2>
+<p><b>Operação de negócio:</b> registrar atendimento de campo (<code>POST /api/ocorrencias/{id}/atendimentos</code>).
+<b>Duas alterações atômicas:</b> (1) <code>UPDATE OCORRENCIA</code>, que baixa QUANTIDADEPENDENTE e ajusta SITUACAO (EM_ATENDIMENTO, ou CONCLUIDA quando o pendente zera); (2) <code>INSERT ATENDIMENTO_OCORRENCIA</code> com quantidade, equipe de campo, EQUIPERM e EXECUTOR.
+<b>Local:</b> <code>src/CitizenTech.Zeladoria.Api/Controllers/AtendimentosController.cs</code>, método <code>Registrar</code>: <code>BeginTransactionAsync</code> (l.38), <code>ExecuteUpdateAsync</code> (l.47), <code>SaveChangesAsync</code> (l.69), <code>CommitAsync</code> (l.76) e <code>RollbackAsync</code> (l.53/91/101).
+<b>Por que juntas:</b> uma baixa sem registro gera serviço "fantasma", com o pendente reduzido sem comprovação de quem executou. Um registro sem baixa mostra ao cidadão uma pendência que já foi atendida e permite atendimento duplicado. Por isso a regra <code>ESTIMADA = PENDENTE + Σ ATENDIDO</code> só se mantém se as duas escritas forem confirmadas ou desfeitas juntas.</p>
+<table>
+<tr><th>Prova</th><th>Estado antes</th><th>Chamada e resposta</th><th>Estado depois</th><th>Evidência</th></tr>
+<tr><td>COMMIT</td><td>Ocorrência 1: pendente 20,000 m²; ABERTA; 0 atendimentos</td><td>atender 1, quantidade 3, EQ_ZEL_MOOCA_01 → <b>201</b> <code>"resultado":"COMMIT"</code></td><td>17,000; EM_ATENDIMENTO; 1 atendimento (3,000); CONSISTENTE = SIM</td><td>E06_01_T07_COMMIT.txt</td></tr>
+<tr><td>ROLLBACK após escritas</td><td>17,000; EM_ATENDIMENTO; 1 atendimento</td><td>atender 1, quantidade 2, <code>simularFalha:true</code>. O log mostra o UPDATE executado (1 linha) e o INSERT executado (ID provisório 101), e então a exceção em l.74 antes do COMMIT → <b>409</b> <code>"resultado":"ROLLBACK"</code></td><td>17,000; EM_ATENDIMENTO; 1 atendimento</td><td>E07_01_T08_ROLLBACK.txt</td></tr>
+</table>
+<p><b>Como a falha foi provocada:</b> <code>simularFalha</code> (aceito só em Development) lança <code>FalhaDemonstracaoException</code> <b>depois</b> que o UPDATE e o INSERT chegaram ao banco na mesma transação. O log do EF Core (<code>Database.Command</code> e <code>Database.Transaction</code>) registra os dois comandos e depois "Rolling back transaction", e as consultas SQL antes e depois mostram o estado preservado. Uma rejeição antecipada, como no T06 (saldo 999 → 409, sem escrever), é tratada separadamente e não é usada como prova de rollback.
+<b>Dados:</b> antes da execução final, o banco foi recriado do zero (00→01→02→03) e o roteiro rodou uma única vez sobre a linha de base. Não usamos ID consecutivo como critério de rollback: a lacuna do ID 101 é normal.
+<b>Proteção de saldo:</b> o UPDATE condicional (<code>WHERE … SITUACAO&lt;&gt;'CONCLUIDA' AND QUANTIDADEPENDENTE&gt;=@q</code>) verifica e baixa o saldo numa única instrução, o que protege contra chamadas concorrentes. Os CHECKs do banco impedem pendente negativo e conclusão incoerente.
+<b>Demonstração SQL complementar:</b> <code>sql/sqlserver/04_Demo_Transacao.sql</code>, para executar num banco separado.</p>
+
+<h2>8 Resultados T01–T10 — R8</h2>
+<p style="font-size:9pt">Data de todos os testes: 25/11/2026. Executor: VitorCardoso_RM556404. Tudo foi executado pelo <code>testes/Executar-Roteiro-T01-T10.ps1</code> contra a API e o banco reais. Resumo automático em E08_00: <b>54 verificações, 0 divergências</b>.</p>
+
+<div class="t"><h3>T01 — Consultar equipe/ocorrências e enviar uma imagem válida, vinculada ao domínio e ao ODS</h3>
+Esperado: HTTP 200 nas consultas; POST 201 com ID real; SQL confirma bytes e metadados.<br>
+Entrada efetivamente usada: GET /api/equipe, /regioes, /categorias, /ocorrencias?regiaoId=1, /ocorrencias/1; POST /api/ocorrencias (JSON, ocorrência "Poste piscando…"); cliente C# <code>enviar-imagem 1 buraco_poste_apagado_mooca.jpg</code>.
+Resultado observado: todos os GETs 200; POST ocorrência 201; upload 201 com <b>ID 100</b>; SQL: BYTES_NO_BANCO 52484 = arquivo, SHA-256 do SQL igual ao original, MIME image/jpeg, EQUIPERM 556095, EXECUTOR VitorCardoso_RM556404.
+Situação: <span class="ok">aprovado</span>. Evidências: E01, E04_01, E04_02. Explicação: o upload é lido por stream e gravado em varbinary(max), e o ID só é devolvido após o SaveChangesAsync.</div>
+
+<div class="t"><h3>T02 — Anotar o ID, parar/reiniciar API e cliente, recuperar por ID sem selecionar o original</h3>
+Esperado: GET 200, metadados e imagem exibida vindos do banco; bytes/hash iguais.<br>
+Entrada: ID 100. A API foi parada (PID 22292) e reiniciada (PID 24984), e o cliente rodou como novo processo com <code>baixar-imagem 100</code>.
+Observado: com a API parada não houve resposta (curl status 0). Após o reinício, GET metadados 200, conteúdo 200 image/jpeg, 52.484 bytes e hash igual ao original (Iguais = True). A imagem foi exibida pelo Edge a partir da URL da API.
+Situação: <span class="ok">aprovado</span>. Evidências: E05_01, E05_02.</div>
+
+<div class="t"><h3>T03 — POST sem arquivo ou com zero bytes e, em outra chamada, título vazio</h3>
+Esperado: 4xx com mensagem; nenhum registro novo.<br>
+Entrada: multipart sem <code>Arquivo</code>; <code>vazio.png</code> (0 bytes); arquivo válido com <code>Titulo=</code>.
+Observado: 400 "Arquivo ausente ou vazio" (duas vezes) e 400 "Título inválido". IMAGEM_OCORRENCIA continuou com 1 linha.
+Situação: <span class="ok">aprovado</span>. Evidência: E08_01.</div>
+
+<div class="t"><h3>T04 — Formato não aceito, .png disfarçado com bytes de texto, arquivo entre 2 e 3 MiB</h3>
+Esperado: 4xx (413 para excesso); sem novo registro.<br>
+Entrada: <code>formato_nao_aceito.gif</code> (image/gif); <code>texto_disfarcado.png</code> (texto, image/png); <code>grande_2_5MiB.jpg</code> (2.621.440 bytes).
+Observado: 415 "Formato não aceito", 415 para o PNG disfarçado (a extensão sozinha não bastou) e 413 "Imagem muito grande". Nenhum registro novo.
+Situação: <span class="ok">aprovado</span>. Evidência: E08_02. O limite do Kestrel/multipart é de 3 MiB, para que o arquivo de 2,5 MiB chegue à regra da API (2 MiB).</div>
+
+<div class="t"><h3>T05 — Consultar imagem com ID ausente e enviar imagem para vínculo inexistente</h3>
+Esperado: 404 coerente; sem gravação; cliente continua utilizável.<br>
+Entrada: o SQL confirmou que IMAGEM 999999 e OCORRENCIA 999999 não existem (0 e 0); GET /api/imagens/999999 e /conteudo; POST imagem para /ocorrencias/999999.
+Observado: 404 nas três chamadas, sem gravação (1 → 1). O cliente <code>metadados 999999</code> mostrou 404 (exit 1) e, em seguida, <code>equipe</code> funcionou (exit 0).
+Situação: <span class="ok">aprovado</span>. Evidência: E08_03.</div>
+
+<div class="t"><h3>T06 — POST transacional com quantidade zero/negativa, saldo insuficiente e executor não cadastrado</h3>
+Esperado: 400/409 documentados; sem redução do saldo e sem nova reserva/atendimento.<br>
+Entrada: quantidade 0, -5 e 1.2345; 999; executor <code>Intruso_RM000000</code>; ocorrência 999999.
+Observado: 400, 400 e 400; 409 "Quantidade indisponível… Nenhum atendimento foi gravado"; 400 "Executor inválido"; 404. O pendente seguiu em 20,000, com 0 atendimentos.
+Situação: <span class="ok">aprovado</span>. Evidência: E08_04.</div>
+
+<div class="t"><h3>T07 — Registrar antes; operação válida com duas alterações; consultar depois</h3>
+Esperado: COMMIT; 20,000 m² e 0 atendimentos passam a 17,000 e 1.<br>
+Entrada: <code>atender 1 3 EQ_ZEL_MOOCA_01</code>. Observado: 201 COMMIT; depois 17,000, EM_ATENDIMENTO, 1 atendimento (ID 100), CONSISTENTE = SIM.
+Situação: <span class="ok">aprovado</span>. Evidência: E06_01, com trecho do log BEGIN/UPDATE/INSERT/COMMIT.</div>
+
+<div class="t"><h3>T08 — Após T07, falha controlada depois do UPDATE e do INSERT, antes de confirmar</h3>
+Esperado: ROLLBACK; 17,000 e 1 antes e depois.<br>
+Entrada: <code>atender 1 2 EQ_ZEL_MOOCA_01 --simular-falha</code>. Observado: 409 ROLLBACK. O log mostra o UPDATE (1 linha) e o INSERT (ID 101) executados e depois o rollback; o estado ficou em 17,000/1 antes e depois.
+Situação: <span class="ok">aprovado</span>. Evidência: E07_01.</div>
+
+<div class="t"><h3>T09 — Abrir o modelo na ferramenta, relacionar as cinco tabelas a fontes/SQL e explicar modelo, fluxo e transação</h3>
+Esperado: PK/FK/cardinalidades e tipos coerentes; relatório e mapa localizam a implementação.<br>
+Observado: o modelo abriu no diagrams.net com as 5 tabelas e as relações 1 : 0..N (E03_04). DDL, AppDb e dicionário estão coerentes (E03_01, E03_03). O mapa R1–R9 aponta arquivo, método e linha (E09_01 e §9).
+Situação: <span class="ok">aprovado</span>. Evidências: E03, E09.</div>
+
+<div class="t"><h3>T10 — Parar somente a API durante um teste do cliente; tentar de novo após reinício</h3>
+Esperado: erro de comunicação compreensível, sem sucesso aparente nem queda não tratada; a retomada funciona.<br>
+Entrada: a API (PID 24984) foi parada; cliente <code>ocorrencias</code> e <code>atender 1 1</code>.
+Observado: "[ERRO DE COMUNICAÇÃO] Não foi possível falar com a API… Nenhuma confirmação foi recebida" (exit 2, sem exceção não tratada). O banco não mudou (17,000). Após o reinício (PID 23548), <code>ocorrencia 1</code> retornou 200.
+Complemento: com a API apontando para um banco inexistente, a resposta foi 503 "Banco de dados indisponível", sem string de conexão nem stack trace (E08_06).
+Situação: <span class="ok">aprovado</span>. Evidências: E08_05, E08_06.</div>
+
+<h2>9 Mapa de requisitos e código — E09</h2>
+<table>
+<tr><th>R</th><th>Implementação: projeto/arquivo/classe/método</th><th>T e E</th><th>Situação</th></tr>
+<tr><td>R1</td><td>README (ficha); E01_01 (escuta); relatório §2</td><td>T01, T09 · E01, E09</td><td>atendido</td></tr>
+<tr><td>R2</td><td>Api/equipe.json; Modelos.cs <code>Equipe.Validar/Contem</code>; Program.cs l.17; <code>GET /api/equipe</code>; colunas EQUIPERM/EXECUTOR</td><td>T01, T06 · E01, E04–E09</td><td>atendido</td></tr>
+<tr><td>R3</td><td>modelo/*.drawio/.png/.dbml, DICIONARIO_DADOS.md; sql/sqlserver/01–03; Dados/AppDb.cs <code>OnModelCreating</code></td><td>T09 · E03, E09</td><td>atendido</td></tr>
+<tr><td>R4</td><td>Program.cs; OcorrenciasController <code>Listar/Obter/Projetar</code> (LINQ, ToListAsync); ImagensController <code>Enviar</code> (OpenReadStream/CopyToAsync); Cliente/Program.cs (StreamContent, ReadAsStreamAsync, PostAsJsonAsync)</td><td>T01, T02 · E04, E05, E09</td><td>atendido</td></tr>
+<tr><td>R5</td><td>ImagensController <code>Enviar/Metadados/Conteudo</code>; ValidadorImagem.cs; IMAGEM_OCORRENCIA.DADOS varbinary(max)</td><td>T01, T02 · E04, E05</td><td>atendido</td></tr>
+<tr><td>R6</td><td>AtendimentosController <code>Registrar</code> (BeginTransactionAsync, ExecuteUpdateAsync, SaveChangesAsync, CommitAsync, RollbackAsync); 04_Demo_Transacao.sql</td><td>T07, T08 · E06, E07, E09</td><td>atendido</td></tr>
+<tr><td>R7</td><td>Validações em ImagensController e AtendimentosController; ValidadorImagem; TratadorDeFalhas (503/500); catch do cliente</td><td>T03–T06, T10 · E08, E09</td><td>atendido</td></tr>
+<tr><td>R8</td><td>testes/Executar-Roteiro-T01-T10.ps1; testes/api.http; Tests/ValidacoesTests.cs</td><td>T01–T10 · E02–E09</td><td>atendido</td></tr>
+<tr><td>R9</td><td>README (versões, scripts, user-secrets, build/run); Executar-Sql.ps1; appsettings sem conexão</td><td>T09 · E02, E09</td><td>atendido</td></tr>
+</table>
+<div class="caixa">
+<p><b>Streams e bytes.</b> Upload: <code>IFormFile.OpenReadStream()</code> → <code>await CopyToAsync(MemoryStream)</code> → <code>byte[]</code> → varbinary(max). As validações de tamanho, título, executor e vínculo vêm antes da leitura, e a de assinatura vem depois. Recuperação: LINQ projeta só <code>Dados/Mime</code> e <code>File(bytes, mime)</code> escreve o corpo de forma assíncrona. No cliente: <code>File.OpenRead</code> → <code>StreamContent</code> (upload) e <code>ReadAsStreamAsync</code> → <code>CopyToAsync(FileStream)</code> (download), com <code>SHA256.HashDataAsync</code> para comparar.</p>
+<p><b>JSON.</b> System.Text.Json em camelCase nas respostas e <code>ProblemDetails</code> nos erros. O cliente usa <code>PostAsJsonAsync</code>. <b>HttpClient.</b> Há uma instância com BaseAddress configurável (<code>ZELADORIA_API</code>) e timeout de 20 s. <code>HttpRequestException</code> e timeout viram mensagens claras com exit 2 (T10).</p>
+<p><b>async/await.</b> Toda E/S de banco (ToListAsync, SingleOrDefaultAsync, AnyAsync, SaveChangesAsync, ExecuteUpdateAsync, Begin/Commit/RollbackAsync) e de rede/arquivo é assíncrona, com CancellationToken. <b>EF Core/LINQ.</b> O AppDb mapeia nomes físicos e tipos do DDL. As consultas usam AsNoTracking, Where opcional, join com região/categoria e contagens, traduzidos num único SELECT (visível no log). <b>Transação.</b> Ver §7.</p>
+<p><b>Falha corrigida (E09_02).</b> <i>Causa:</i> <code>OrderBy</code> aplicado depois da projeção para o record <code>OcorrenciaResumo</code> (construtor) não é traduzível pelo EF Core. Por isso <code>GET /api/ocorrencias</code> respondia 500, e o teste de 503 recebia 500. <i>Ação:</i> a ordenação foi movida para dentro da consulta (<code>orderby o.Id</code> antes do select). <i>Resultado:</i> com o banco recriado e o roteiro executado de novo, o resultado passou de 52/54 para 54/54. <i>Prevenção:</i> o roteiro compara esperado × observado e marca DIVERGE automaticamente.</p>
+<p><b>Limitações.</b> Não há autenticação (<code>/api/equipe</code> é só identificação acadêmica). A validação de assinatura é simples. LocalDB é uma instância de desenvolvimento local. O indicador é proposto e os dados de domínio são fictícios.</p>
+</div>
+
+<h2>10 Uso de IA e fontes</h2>
+<p><b>Houve uso de IA:</b> sim. Usamos o Claude Code (Anthropic) em 25/11/2026 para auditar a entrega anterior contra a rubrica e reestruturar código, SQL, modelo, roteiro de testes e documentação.
+<b>Caminho:</b> <code>prompts.md</code>, com os prompts relevantes, a finalidade, o resultado aproveitado e a validação prática. A validação foi a execução real: build, 11 testes unitários e o roteiro T01–T10 com 54/54. A IA não inventou a escuta nem dados acadêmicos, e a aplicação não depende de IA nem de serviço pago.
+<b>Fontes e imagens:</b> documentos D02/D03/D04 da disciplina; documentação Microsoft (ASP.NET Core, EF Core); ícone oficial do ODS 11 © Nações Unidas (brasil.un.org); imagem de teste com ilustração própria (<code>amostras/CREDITOS.md</code>).
+<b>Dados de domínio:</b> fictícios (endereços, ocorrências, quantidades). <b>Dados acadêmicos:</b> reais. <b>Limitações e impacto:</b> apenas propostos (§2).</p>
+
+<h2>11 Reprodução e checklist final</h2>
+<p>O README indica o banco escolhido (SQL Server), a ordem dos scripts (00→01→02→03; 04 separado), a configuração segura (user-secrets, sem senha), os comandos de build/run/test e o roteiro de testes.</p>
+<table>
+<tr><th>Item</th><th>Situação</th></tr>
+<tr><td>Arquivo editável do modelo + exportação + captura da ferramenta</td><td class="ok">ok — modelo/, E03_04</td></tr>
+<tr><td>Bytes reais no banco e recuperação após reinício</td><td class="ok">ok — E04_02, E05</td></tr>
+<tr><td>Transação com duas provas (COMMIT e ROLLBACK após escritas)</td><td class="ok">ok — E06, E07</td></tr>
+<tr><td>T01–T10 com observado e evidências; índice E01–E09</td><td class="ok">ok — §8, evidencias/indice.md</td></tr>
+<tr><td>Coerência dos integrantes (README, equipe.json, relatório, metadados)</td><td class="ok">ok</td></tr>
+<tr><td>ZIP com uma pasta raiz de mesmo nome-base, sem credenciais, sem bin/obj/.vs</td><td class="ok">ok</td></tr>
+</table>
+<p>Somente o líder envia <code>GS_CSHARP_KaioSouza_RM556095.zip</code>, com a pasta raiz <code>GS_CSHARP_KaioSouza_RM556095/</code>. Preparação da equipe: este relatório, o mapa E09_01 e o roteiro reproduzível são o material comum para todos os integrantes explicarem o fluxo, a transação e os testes quando solicitado.</p>
+
+<h2>12 Local do relatório no ZIP</h2>
+<p>Este documento é <code>docs/relatorio.pdf</code> (fonte editável: <code>docs/relatorio_fonte.html</code>). O README da raiz explica como executar, este relatório explica a solução e registra esperado × observado, e <code>evidencias/indice.md</code> relaciona cada prova ao arquivo real.</p>
+
+<h2>13 Envio e nota da equipe</h2>
+<p>A entrega é feita no Microsoft Teams da turma 3ESPH, na tarefa "Global Solution 2026.2 — C# Software Development — 3ESPH", pelo líder Kaio Drago Lima Souza (RM556095). A nota de C# é a da equipe, lançada para cada integrante, conforme a rubrica D04.</p>
+
+</body>
+</html>

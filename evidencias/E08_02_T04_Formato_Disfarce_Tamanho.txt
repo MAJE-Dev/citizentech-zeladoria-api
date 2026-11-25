@@ -1,0 +1,36 @@
+﻿
+====================================================================================================
+T04 - Formato não aceito, .png disfarçado com texto e arquivo entre 2 e 3 MiB | E08
+Data/hora: 2026-11-25 19:57:12 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: 4xx (415 para formato/assinatura, 413 para excesso); sem novo registro.
+    Imagens no banco ANTES: 1
+
+>>> POST .gif (formato não aceito)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\formato_nao_aceito.gif;type=image/gif --form-string Titulo=GIF --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 415 Unsupported Media Type
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.16","title":"Formato não aceito","status":415,"detail":"Envie PNG ou JPEG com extensão, Content-Type e assinatura (bytes iniciais) compatíveis.","traceId":"00-97ea52b6c49c82804cf2d567b7c4e947-bc6e3fe09244695c-00"}
+    => Esperado HTTP 415 | Observado HTTP 415 | CONFERE
+
+>>> POST .png com bytes de texto (extensão e MIME mentem)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\texto_disfarcado.png;type=image/png --form-string Titulo=PNG falso --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 415 Unsupported Media Type
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.16","title":"Formato não aceito","status":415,"detail":"Envie PNG ou JPEG com extensão, Content-Type e assinatura (bytes iniciais) compatíveis.","traceId":"00-23409dbbfcc6c0f9ee6151c89c57d344-327a255e49a68dd1-00"}
+    => Esperado HTTP 415 | Observado HTTP 415 | CONFERE
+    Arquivo grande: 2621440 bytes (2,5 MiB)
+
+>>> POST .jpg com 2,5 MiB (acima de 2 MiB, abaixo de 3 MiB)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/1/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\grande_2_5MiB.jpg;type=image/jpeg --form-string Titulo=Grande --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 100 Continue
+    
+    HTTP/1.1 413 Payload Too Large
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.14","title":"Imagem muito grande","status":413,"detail":"Limite de 2 MiB (2097152 bytes) por imagem; recebido 2621440 bytes.","traceId":"00-c1594f9a646cf0de9a420804e4a6111e-13007eb11e147548-00"}
+    => Esperado HTTP 413 | Observado HTTP 413 | CONFERE
+    Imagens no banco DEPOIS: 1
+    => Verificação: Nenhum registro novo em IMAGEM_OCORRENCIA | CONFERE

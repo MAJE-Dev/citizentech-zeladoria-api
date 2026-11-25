@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+*.user
+# gerado pelo roteiro de testes (2,5 MiB aleatórios; recriado a cada execução)
+testes/saida/grande_2_5MiB.jpg
+testes/saida/*.err
