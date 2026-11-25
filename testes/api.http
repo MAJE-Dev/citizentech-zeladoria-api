@@ -1,0 +1,82 @@
+### Zeladoria API Urbana - roteiro manual (VS Code REST Client / Visual Studio .http)
+### Troque @executor pelo seu NomeAluno_RM e @imagemId pelo ID real devolvido no upload.
+@base = http://localhost:5080
+@executor = VitorCardoso_RM556404
+@imagemId = 100
+
+### T01 - identificação e consultas do domínio
+GET {{base}}/api/equipe
+
+###
+GET {{base}}/api/ocorrencias?regiaoId=1
+
+###
+GET {{base}}/api/ocorrencias/1
+
+### T01 - cidadão registra ocorrência (JSON)
+POST {{base}}/api/ocorrencias
+Content-Type: application/json
+
+{ "regiaoId": 1, "categoriaId": 2, "titulo": "Poste piscando", "descricao": "Teste manual (fictício).",
+  "endereco": "Rua Exemplo, 50 (Mooca)", "unidade": "un", "quantidadeEstimada": 1, "executor": "{{executor}}" }
+
+### T01 - upload multipart (imagem real em bytes)
+POST {{base}}/api/ocorrencias/1/imagens
+Content-Type: multipart/form-data; boundary=----GS
+
+------GS
+Content-Disposition: form-data; name="Titulo"
+
+Buraco com agua e postes apagados - Mooca
+------GS
+Content-Disposition: form-data; name="Executor"
+
+{{executor}}
+------GS
+Content-Disposition: form-data; name="Arquivo"; filename="buraco_poste_apagado_mooca.jpg"
+Content-Type: image/jpeg
+
+< ../amostras/buraco_poste_apagado_mooca.jpg
+------GS--
+
+### T01/T02 - metadados e conteúdo (repetir após reiniciar a API, sem novo upload)
+GET {{base}}/api/imagens/{{imagemId}}
+
+###
+GET {{base}}/api/imagens/{{imagemId}}/conteudo
+
+### T05 - ID inexistente
+GET {{base}}/api/imagens/999999
+
+### T06 - rejeições (nada é gravado)
+POST {{base}}/api/ocorrencias/1/atendimentos
+Content-Type: application/json
+
+{ "quantidade": 0, "equipeCampoCodigo": "EQ_ZEL_MOOCA_01", "executor": "{{executor}}" }
+
+###
+POST {{base}}/api/ocorrencias/1/atendimentos
+Content-Type: application/json
+
+{ "quantidade": 999, "equipeCampoCodigo": "EQ_ZEL_MOOCA_01", "executor": "{{executor}}" }
+
+###
+POST {{base}}/api/ocorrencias/1/atendimentos
+Content-Type: application/json
+
+{ "quantidade": 1, "equipeCampoCodigo": "EQ_ZEL_MOOCA_01", "executor": "Intruso_RM000000" }
+
+### T07 - COMMIT (linha de base 20 -> 17, 0 -> 1 atendimento)
+POST {{base}}/api/ocorrencias/1/atendimentos
+Content-Type: application/json
+
+{ "quantidade": 3, "equipeCampoCodigo": "EQ_ZEL_MOOCA_01", "executor": "{{executor}}", "simularFalha": false }
+
+### T08 - ROLLBACK após UPDATE e INSERT (continua 17 e 1)
+POST {{base}}/api/ocorrencias/1/atendimentos
+Content-Type: application/json
+
+{ "quantidade": 2, "equipeCampoCodigo": "EQ_ZEL_MOOCA_01", "executor": "{{executor}}", "simularFalha": true }
+
+### Conferir depois de T07/T08
+GET {{base}}/api/ocorrencias/1/atendimentos

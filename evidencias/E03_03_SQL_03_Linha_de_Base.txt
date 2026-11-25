@@ -1,0 +1,54 @@
+﻿-- 2026-11-25 19:56:59 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=03_Verificar_Resultados.sql
+
+SERVIDOR_INSTANCIA       BANCO               CONSULTA_UTC       
+------------------       -----               ------------       
+VitorPC\LOCALDB#872C28EB GS_CSHARP_ZELADORIA 11/25/2026 22:56:59
+
+
+
+
+TABELA                 LINHAS
+------                 ------
+REGIAO                      2
+CATEGORIA_OCORRENCIA        3
+OCORRENCIA                  3
+IMAGEM_OCORRENCIA           0
+ATENDIMENTO_OCORRENCIA      0
+
+
+
+
+OCORRENCIAID UNIDADE QUANTIDADEESTIMADA QUANTIDADEPENDENTE SITUACAO ATENDIMENTOS QUANTIDADE_ATENDIDA CONSISTENTE
+------------ ------- ------------------ ------------------ -------- ------------ ------------------- -----------
+           1 m2                  20.000             20.000 ABERTA              0               0.000 SIM        
+           2 un                   6.000              6.000 ABERTA              0               0.000 SIM        
+           3 m3                   4.500              4.500 ABERTA              0               0.000 SIM        
+
+
+
+(0 linhas) colunas: ID, OCORRENCIAID, QUANTIDADE, EQUIPECAMPOCODIGO, EQUIPERM, EXECUTOR, CRIADOUTC
+(0 linhas) colunas: ID, OCORRENCIAID, OCORRENCIA, TITULO, NOMEARQUIVO, MIME, TAMANHOBYTES, BYTES_NO_BANCO, HASH_GRAVADO_PELA_API, HASH_CALCULADO_NO_BANCO, PRIMEIROS_BYTES, EQUIPERM, EXECUTOR, ENVIADAUTC
+
+FK                        TABELA_FILHA           TABELA_PAI           AO_EXCLUIR
+--                        ------------           ----------           ----------
+FK_ATENDIMENTO_OCORRENCIA ATENDIMENTO_OCORRENCIA OCORRENCIA           NO_ACTION 
+FK_IMAGEM_OCORRENCIA      IMAGEM_OCORRENCIA      OCORRENCIA           NO_ACTION 
+FK_OCORRENCIA_CATEGORIA   OCORRENCIA             CATEGORIA_OCORRENCIA NO_ACTION 
+FK_OCORRENCIA_REGIAO      OCORRENCIA             REGIAO               NO_ACTION 
+
+
+
+
+TABELA                 CHECK_CONSTRAINT        REGRA                                                                                                          
+------                 ----------------        -----                                                                                                          
+ATENDIMENTO_OCORRENCIA CK_ATENDIMENTO_QTD      ([QUANTIDADE]>(0))                                                                                             
+IMAGEM_OCORRENCIA      CK_IMAGEM_MIME          ([MIME]=N'image/jpeg' OR [MIME]=N'image/png')                                                                  
+IMAGEM_OCORRENCIA      CK_IMAGEM_TAMANHO       ([TAMANHOBYTES]>(0) AND [TAMANHOBYTES]<=(2097152) AND [TAMANHOBYTES]=datalength([DADOS]))                      
+OCORRENCIA             CK_OCORRENCIA_CONCLUSAO ([SITUACAO]=N'CONCLUIDA' AND [QUANTIDADEPENDENTE]=(0) OR [SITUACAO]<>N'CONCLUIDA' AND [QUANTIDADEPENDENTE]>(0))
+OCORRENCIA             CK_OCORRENCIA_ESTIMADA  ([QUANTIDADEESTIMADA]>(0))                                                                                     
+OCORRENCIA             CK_OCORRENCIA_PENDENTE  ([QUANTIDADEPENDENTE]>=(0) AND [QUANTIDADEPENDENTE]<=[QUANTIDADEESTIMADA])                                     
+OCORRENCIA             CK_OCORRENCIA_SITUACAO  ([SITUACAO]=N'CONCLUIDA' OR [SITUACAO]=N'EM_ATENDIMENTO' OR [SITUACAO]=N'ABERTA')                              
+
+
+
+-- OK: 03_Verificar_Resultados.sql executado sem erro.

@@ -1,0 +1,97 @@
+﻿
+====================================================================================================
+T07 - Operação válida da API com duas alterações (UPDATE OCORRENCIA + INSERT ATENDIMENTO) -> COMMIT | E06
+Data/hora: 2026-11-25 19:57:16 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: COMMIT; ambas persistem. Ocorrência 1: 20.000 m2 e 0 atendimentos -> 17.000 m2 e 1 atendimento.
+
+--- ANTES (linha de base registrada) ----------------------------------------------------------
+-- 2026-11-25 19:57:16 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ID QUANTIDADEESTIMADA QUANTIDADEPENDENTE SITUACAO ATENDIMENTOS QTD_ATENDIDA ATENDIMENTOS_TOTAL
+-- ------------------ ------------------ -------- ------------ ------------ ------------------
+ 1             20.000             20.000 ABERTA              0        0.000                  0
+
+
+
+
+--- CHAMADA (cliente C#, JSON) ----------------------------------------------------------------
+
+>>> Cliente: atender 1 3 EQ_ZEL_MOOCA_01 (sem falha)
+    dotnet CitizenTech.Zeladoria.Cliente.dll atender 1 3 EQ_ZEL_MOOCA_01 VitorCardoso_RM556404
+    [cliente] 2026-11-25 19:57:16 -03:00 | API http://localhost:5080 | comando: atender 1 3 EQ_ZEL_MOOCA_01 VitorCardoso_RM556404
+    HTTP 201 Created | Content-Type: application/json; charset=utf-8
+    {
+      "resultado": "COMMIT",
+      "id": 100,
+      "ocorrenciaId": 1,
+      "quantidade": 3,
+      "equipeCampoCodigo": "EQ_ZEL_MOOCA_01",
+      "equipeRm": "556095",
+      "executor": "VitorCardoso_RM556404",
+      "criadoUtc": "2026-11-25T22:57:16.3685473Z",
+      "ocorrenciaPendente": 17.000,
+      "ocorrenciaSituacao": "EM_ATENDIMENTO"
+    }
+    (exit code do cliente: 0)
+    => Esperado exit 0 | Observado exit 0 | CONFERE
+
+--- DEPOIS ------------------------------------------------------------------------------------
+-- 2026-11-25 19:57:16 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ID QUANTIDADEESTIMADA QUANTIDADEPENDENTE SITUACAO       ATENDIMENTOS QTD_ATENDIDA ATENDIMENTOS_TOTAL
+-- ------------------ ------------------ --------       ------------ ------------ ------------------
+ 1             20.000             17.000 EM_ATENDIMENTO            1        3.000                  1
+
+
+
+-- 2026-11-25 19:57:16 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ ID OCORRENCIAID QUANTIDADE EQUIPECAMPOCODIGO EQUIPERM EXECUTOR              CRIADOUTC          
+ -- ------------ ---------- ----------------- -------- --------              ---------          
+100            1      3.000 EQ_ZEL_MOOCA_01   556095   VitorCardoso_RM556404 11/25/2026 22:57:16
+
+
+
+    => Verificação: Pendente = 17.000 após COMMIT | CONFERE
+    => Verificação: 1 atendimento persistido | CONFERE
+
+--- LOG DA API (testes\saida\api_sessao2.log) - SQL realmente executado na transação do T07 ---
+    | 2026-11-25 19:57:16.366 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20209]
+    |       Beginning transaction with isolation level 'Unspecified'.
+    | 2026-11-25 19:57:16.366 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20200]
+    |       Began transaction with isolation level 'ReadCommitted'.
+    | 2026-11-25 19:57:16.367 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+    |       [TX] BEGIN | ocorrencia=1 quantidade=3 executor=VitorCardoso_RM556404 simularFalha=False
+    | 2026-11-25 19:57:16.368 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+    |       Executed DbCommand (0ms) [Parameters=[@q='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @_8__locals1_ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+    |       UPDATE [o]
+    |       SET [o].[QUANTIDADEPENDENTE] = [o].[QUANTIDADEPENDENTE] - @q,
+    |           [o].[SITUACAO] = CASE
+    |               WHEN [o].[QUANTIDADEPENDENTE] - @q = 0.0 THEN N'CONCLUIDA'
+    |               ELSE N'EM_ATENDIMENTO'
+    |           END
+    |       FROM [OCORRENCIA] AS [o]
+    |       WHERE [o].[ID] = @_8__locals1_ocorrenciaId AND [o].[SITUACAO] <> N'CONCLUIDA' AND [o].[QUANTIDADEPENDENTE] >= @q
+    | 2026-11-25 19:57:16.368 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+    |       [TX] escrita 1/2 OK: UPDATE OCORRENCIA 1 (1 linha)
+    | 2026-11-25 19:57:16.488 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20212]
+    |       Creating transaction savepoint.
+    | 2026-11-25 19:57:16.491 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20213]
+    |       Created transaction savepoint.
+    | 2026-11-25 19:57:16.498 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+    |       Executed DbCommand (3ms) [Parameters=[@p0='?' (Scale = 6) (DbType = DateTime2), @p1='?' (Size = 40), @p2='?' (Size = 20), @p3='?' (Size = 80), @p4='?' (DbType = Int32), @p5='?' (Precision = 12) (Scale = 3) (DbType = Decimal)], CommandType='Text', CommandTimeout='30']
+    |       SET IMPLICIT_TRANSACTIONS OFF;
+    |       SET NOCOUNT ON;
+    |       INSERT INTO [ATENDIMENTO_OCORRENCIA] ([CRIADOUTC], [EQUIPECAMPOCODIGO], [EQUIPERM], [EXECUTOR], [OCORRENCIAID], [QUANTIDADE])
+    |       OUTPUT INSERTED.[ID]
+    |       VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+    | 2026-11-25 19:57:16.517 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+    |       [TX] escrita 2/2 OK: INSERT ATENDIMENTO_OCORRENCIA ID=100 (ainda NAO confirmado)
+    | 2026-11-25 19:57:16.518 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20210]
+    |       Committing transaction.
+    | 2026-11-25 19:57:16.520 dbug: Microsoft.EntityFrameworkCore.Database.Transaction[20202]
+    |       Committed transaction.
+    | 2026-11-25 19:57:16.520 info: CitizenTech.Zeladoria.Api.Controllers.AtendimentosController[0]
+    |       [TX] COMMIT | atendimento=100 confirmado junto com a baixa da ocorrencia 1
+    | 2026-11-25 19:57:16.525 info: Microsoft.EntityFrameworkCore.Database.Command[20101]

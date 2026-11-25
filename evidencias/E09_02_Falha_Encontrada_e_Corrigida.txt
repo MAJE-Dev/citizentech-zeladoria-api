@@ -1,0 +1,37 @@
+﻿E09/C7 - Falha encontrada pelos testes reais e corrigida (causa, ação e resultado)
+Primeira execução do roteiro: 2026-11-25 19:55 (-03:00), executor VitorCardoso_RM556404, máquina VITORPC.
+
+1) SINTOMA (evidencias\E08_00 da 1a execução - linhas divergentes):
+   E04_01_T01_Consultas_e_Upload.txt           GET /api/ocorrencias?regiaoId=1 (filtro LINQ)                                    200              500 DIVERGE 
+   E08_06_Banco_Indisponivel_503.txt           GET /api/ocorrencias com banco indisponível                                      503              500 DIVERGE 
+   Total: 52 verificações | divergências: 2
+   - GET /api/ocorrencias?regiaoId=1 respondeu 500 em vez de 200 (T01).
+   - O teste de banco indisponível usou a mesma rota e também recebeu 500 em vez de 503.
+
+2) LOG DA API (trecho copiado de testes\saida\api_sessao1.log da 1a execução; a pasta de saída foi recriada na 2a execução):
+   |       Falha tratada (500) em GET /api/ocorrencias
+   |       System.InvalidOperationException: The LINQ expression 'DbSet<Ocorrencia>()
+   |           .Where(o => (int?)o.RegiaoId == @regiaoId)
+   |           .Join(
+   |               inner: DbSet<Regiao>(), 
+   |               outerKeySelector: o => (object)o.RegiaoId, 
+   |               innerKeySelector: r => (object)r.Id, 
+   |               resultSelector: (o, r) => new TransparentIdentifier<Ocorrencia, Regiao>(
+   |                   Outer = o, 
+   |                   Inner = r
+   |               ))
+   |           .Join(
+   |               inner: DbSet<CategoriaOcorrencia>(), 
+   |               outerKeySelector: ti => (object)ti.Outer.CategoriaId, 
+
+3) CAUSA: em OcorrenciasController.Listar, o OrderBy(x => x.Id) era aplicado DEPOIS da projeção para o record
+   OcorrenciaResumo (construtor). O EF Core não traduz ordenação sobre membros de um tipo criado por construtor,
+   então a consulta falhava antes de chegar ao banco. GET /api/ocorrencias/{id} não usava OrderBy e funcionava.
+
+4) AÇÃO: a ordenação passou para dentro da consulta LINQ, antes do select (OcorrenciasController.Projetar:
+   'orderby o.Id' após os joins) e o OrderBy posterior foi removido de Listar.
+
+5) PREVENÇÃO: o roteiro testes\Executar-Roteiro-T01-T10.ps1 compara automaticamente esperado x observado e marca
+   DIVERGE; nenhuma rota é considerada aprovada só porque compila. O teste de 503 passou a validar também o corpo.
+
+6) RESULTADO: banco recriado do zero (00->01->02->03) e roteiro executado novamente; ver evidencias\E08_00 (2a execução).

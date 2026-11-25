@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CitizenTech.Zeladoria.Api/CitizenTech.Zeladoria.Api.csproj" />
+  <Project Path="CitizenTech.Zeladoria.Cliente/CitizenTech.Zeladoria.Cliente.csproj" />
+  <Project Path="CitizenTech.Zeladoria.Tests/CitizenTech.Zeladoria.Tests.csproj" />
+</Solution>

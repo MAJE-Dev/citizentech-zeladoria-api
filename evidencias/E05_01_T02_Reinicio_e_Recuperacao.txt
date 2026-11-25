@@ -1,0 +1,56 @@
+﻿
+====================================================================================================
+T02 - Anotar ID, parar/reiniciar API e cliente, recuperar por ID sem selecionar o original | E05
+Data/hora: 2026-11-25 19:57:08 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: GET 200, metadados e imagem exibida vindos do banco; bytes/hash iguais. ID anotado no T01: 100
+
+--- Parar a API -------------------------------------------------------------------------------
+    [API] processo PID 22292 encerrado em 19:57:08 (API parada)
+
+>>> GET com a API parada (confirma que nada responde)
+    curl.exe http://localhost:5080/api/imagens/100
+    curl: (7) Failed to connect to localhost:5080 after 0 ms: Could not connect to server
+    
+    => Esperado HTTP 0 | Observado HTTP 0 | CONFERE
+
+--- Reiniciar a API (novo processo) -----------------------------------------------------------
+    [API] sessão 2 iniciada: PID 24984, http://localhost:5080, ambiente Development, log testes\saida\api_sessao2.log
+    => Verificação: PID mudou após reinício (22292 -> 24984) | CONFERE
+
+--- Recuperar pelo MESMO ID, sem upload e sem abrir o arquivo original ------------------------
+
+>>> GET /api/imagens/100 (metadados após reinício)
+    curl.exe http://localhost:5080/api/imagens/100
+    HTTP/1.1 200 OK
+    Content-Type: application/json; charset=utf-8
+    
+    {"id":100,"ocorrenciaId":1,"titulo":"Buraco com agua e postes apagados - Mooca","nomeArquivo":"buraco_poste_apagado_mooca.jpg","mime":"image/jpeg","tamanhoBytes":52484,"hashSha256":"D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E","equipeRm":"556095","executor":"VitorCardoso_RM556404","enviadaUtc":"2026-11-25T22:57:07.791239Z"}
+    => Esperado HTTP 200 | Observado HTTP 200 | CONFERE
+
+>>> Cliente (novo processo): baixar-imagem 100 via GET /conteudo (stream -> arquivo)
+    dotnet CitizenTech.Zeladoria.Cliente.dll baixar-imagem 100 C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\recuperada_imagem_100.jpg
+    [cliente] 2026-11-25 19:57:10 -03:00 | API http://localhost:5080 | comando: baixar-imagem 100 C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\recuperada_imagem_100.jpg
+    HTTP 200 | Content-Type: image/jpeg
+    Origem informada pela API: SQL Server IMAGEM_OCORRENCIA ID=100
+    SHA-256 gravado no banco : D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E
+    SHA-256 do recuperado    : D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E
+    Arquivo recuperado       : C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\testes\saida\recuperada_imagem_100.jpg (52484 bytes) - NÃO é o arquivo original, veio do GET /conteudo
+    (exit code do cliente: 0)
+    => Esperado exit 0 | Observado exit 0 | CONFERE
+    SHA-256 original   : D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E (52484 bytes)
+    SHA-256 recuperado : D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E (52484 bytes)
+    => Verificação: Iguais (bytes recuperados da API após reinício = original) | CONFERE
+
+--- Exibição da imagem servida pela API (Microsoft Edge, captura em evidencias\E05_02_T02_Imagem_Exibida_Apos_Reinicio.png) ---
+    => Verificação: Captura PNG da exibição gerada | CONFERE
+
+--- SQL: mesma linha por ID após reinício -----------------------------------------------------
+-- 2026-11-25 19:57:12 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+ ID OCORRENCIAID NOMEARQUIVO                    MIME       TAMANHOBYTES BYTES_NO_BANCO HASHSHA256                                                       ENVIADAUTC         
+ -- ------------ -----------                    ----       ------------ -------------- ----------                                                       ----------         
+100            1 buraco_poste_apagado_mooca.jpg image/jpeg        52484          52484 D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E 11/25/2026 22:57:07
+
+
+

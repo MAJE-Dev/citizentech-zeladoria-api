@@ -1,0 +1,13 @@
+﻿-- 2026-11-25 19:56:59 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=02_Carga_Ficticia.sql
+
+TABELA                 LINHAS
+------                 ------
+REGIAO                      2
+CATEGORIA_OCORRENCIA        3
+OCORRENCIA                  3
+IMAGEM_OCORRENCIA           0
+ATENDIMENTO_OCORRENCIA      0
+
+
+
+-- OK: 02_Carga_Ficticia.sql executado sem erro.

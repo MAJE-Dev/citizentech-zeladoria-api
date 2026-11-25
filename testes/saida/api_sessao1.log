@@ -1,0 +1,127 @@
+2026-11-25 19:57:04.638 info: CitizenTech.Zeladoria.Api[0]
+      Zeladoria API iniciada | CitizenTech=Zeladoria API Urbana | turma=3ESPH | lider RM=556095 | ambiente=Development
+2026-11-25 19:57:04.688 info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5080
+2026-11-25 19:57:04.689 info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+2026-11-25 19:57:04.689 info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+2026-11-25 19:57:04.689 info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\src\CitizenTech.Zeladoria.Api
+2026-11-25 19:57:06.140 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (23ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [r].[ID], [r].[BAIRRO], [r].[CIDADE], [r].[NOME]
+      FROM [REGIAO] AS [r]
+      ORDER BY [r].[ID]
+2026-11-25 19:57:06.377 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [c].[ID], [c].[NOME]
+      FROM [CATEGORIA_OCORRENCIA] AS [c]
+      ORDER BY [c].[ID]
+2026-11-25 19:57:06.716 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (75ms) [Parameters=[@regiaoId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [o].[ID], [o].[TITULO], [r].[NOME], [r].[BAIRRO], [c].[NOME], [o].[ENDERECO], [o].[UNIDADE], [o].[QUANTIDADEESTIMADA], [o].[QUANTIDADEPENDENTE], [o].[SITUACAO], [o].[ABERTAUTC], (
+          SELECT COUNT(*)
+          FROM [IMAGEM_OCORRENCIA] AS [i]
+          WHERE [i].[OCORRENCIAID] = [o].[ID]), (
+          SELECT COUNT(*)
+          FROM [ATENDIMENTO_OCORRENCIA] AS [a]
+          WHERE [a].[OCORRENCIAID] = [o].[ID])
+      FROM [OCORRENCIA] AS [o]
+      INNER JOIN [REGIAO] AS [r] ON [o].[REGIAOID] = [r].[ID]
+      INNER JOIN [CATEGORIA_OCORRENCIA] AS [c] ON [o].[CATEGORIAID] = [c].[ID]
+      WHERE [o].[REGIAOID] = @regiaoId
+      ORDER BY [o].[ID]
+2026-11-25 19:57:06.881 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [o].[ID], [o].[TITULO], [r].[NOME], [r].[BAIRRO], [c].[NOME], [o].[ENDERECO], [o].[UNIDADE], [o].[QUANTIDADEESTIMADA], [o].[QUANTIDADEPENDENTE], [o].[SITUACAO], [o].[ABERTAUTC], (
+          SELECT COUNT(*)
+          FROM [IMAGEM_OCORRENCIA] AS [i]
+          WHERE [i].[OCORRENCIAID] = [o].[ID]), (
+          SELECT COUNT(*)
+          FROM [ATENDIMENTO_OCORRENCIA] AS [a]
+          WHERE [a].[OCORRENCIAID] = [o].[ID])
+      FROM [OCORRENCIA] AS [o]
+      INNER JOIN [REGIAO] AS [r] ON [o].[REGIAOID] = [r].[ID]
+      INNER JOIN [CATEGORIA_OCORRENCIA] AS [c] ON [o].[CATEGORIAID] = [c].[ID]
+      WHERE [o].[ID] = @id
+      ORDER BY [o].[ID]
+2026-11-25 19:57:07.105 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@e_RegiaoId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [REGIAO] AS [r]
+              WHERE [r].[ID] = @e_RegiaoId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:07.118 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@e_CategoriaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [CATEGORIA_OCORRENCIA] AS [c]
+              WHERE [c].[ID] = @e_CategoriaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:07.285 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@p0='?' (Scale = 6) (DbType = DateTime2), @p1='?' (DbType = Int32), @p2='?' (Size = 500), @p3='?' (Size = 150), @p4='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @p5='?' (Precision = 12) (Scale = 3) (DbType = Decimal), @p6='?' (DbType = Int32), @p7='?' (Size = 20), @p8='?' (Size = 100), @p9='?' (Size = 10)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      INSERT INTO [OCORRENCIA] ([ABERTAUTC], [CATEGORIAID], [DESCRICAO], [ENDERECO], [QUANTIDADEESTIMADA], [QUANTIDADEPENDENTE], [REGIAOID], [SITUACAO], [TITULO], [UNIDADE])
+      OUTPUT INSERTED.[ID]
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-11-25 19:57:07.307 info: CitizenTech.Zeladoria.Api.Controllers.OcorrenciasController[0]
+      Ocorrência 100 registrada por VitorCardoso_RM556404
+2026-11-25 19:57:07.320 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[@nova_Id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [o].[ID], [o].[TITULO], [r].[NOME], [r].[BAIRRO], [c].[NOME], [o].[ENDERECO], [o].[UNIDADE], [o].[QUANTIDADEESTIMADA], [o].[QUANTIDADEPENDENTE], [o].[SITUACAO], [o].[ABERTAUTC], (
+          SELECT COUNT(*)
+          FROM [IMAGEM_OCORRENCIA] AS [i]
+          WHERE [i].[OCORRENCIAID] = [o].[ID]), (
+          SELECT COUNT(*)
+          FROM [ATENDIMENTO_OCORRENCIA] AS [a]
+          WHERE [a].[OCORRENCIAID] = [o].[ID])
+      FROM [OCORRENCIA] AS [o]
+      INNER JOIN [REGIAO] AS [r] ON [o].[REGIAOID] = [r].[ID]
+      INNER JOIN [CATEGORIA_OCORRENCIA] AS [c] ON [o].[CATEGORIAID] = [c].[ID]
+      WHERE [o].[ID] = @nova_Id
+      ORDER BY [o].[ID]
+2026-11-25 19:57:07.789 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@ocorrenciaId='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @ocorrenciaId) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:07.841 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (28ms) [Parameters=[@p0='?' (Size = -1) (DbType = Binary), @p1='?' (Scale = 6) (DbType = DateTime2), @p2='?' (Size = 20), @p3='?' (Size = 80), @p4='?' (Size = 64) (DbType = AnsiStringFixedLength), @p5='?' (Size = 30), @p6='?' (Size = 200), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (Size = 100)], CommandType='Text', CommandTimeout='30']
+      SET IMPLICIT_TRANSACTIONS OFF;
+      SET NOCOUNT ON;
+      INSERT INTO [IMAGEM_OCORRENCIA] ([DADOS], [ENVIADAUTC], [EQUIPERM], [EXECUTOR], [HASHSHA256], [MIME], [NOMEARQUIVO], [OCORRENCIAID], [TAMANHOBYTES], [TITULO])
+      OUTPUT INSERTED.[ID]
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+2026-11-25 19:57:07.843 info: CitizenTech.Zeladoria.Api.Controllers.ImagensController[0]
+      Imagem 100 gravada em IMAGEM_OCORRENCIA | ocorrencia=1 bytes=52484 sha256=D9562337A5382EC422E71E3D6349D2ECD508E22EEA0209ACF5B92DFB43C91A4E executor=VitorCardoso_RM556404
+2026-11-25 19:57:08.290 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (3ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [i].[ID], [i].[OCORRENCIAID], [i].[TITULO], [i].[NOMEARQUIVO], [i].[MIME], [i].[TAMANHOBYTES], [i].[HASHSHA256], [i].[EQUIPERM], [i].[EXECUTOR], [i].[ENVIADAUTC]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[ID] = @id
+2026-11-25 19:57:08.428 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT CASE
+          WHEN EXISTS (
+              SELECT 1
+              FROM [OCORRENCIA] AS [o]
+              WHERE [o].[ID] = @id) THEN CAST(1 AS bit)
+          ELSE CAST(0 AS bit)
+      END
+2026-11-25 19:57:08.434 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [i].[ID], [i].[OCORRENCIAID], [i].[TITULO], [i].[NOMEARQUIVO], [i].[MIME], [i].[TAMANHOBYTES], [i].[HASHSHA256], [i].[EQUIPERM], [i].[EXECUTOR], [i].[ENVIADAUTC]
+      FROM [IMAGEM_OCORRENCIA] AS [i]
+      WHERE [i].[OCORRENCIAID] = @id
+      ORDER BY [i].[ID]

@@ -1,0 +1,24 @@
+2026-11-25 19:57:26.542 info: CitizenTech.Zeladoria.Api[0]
+      Zeladoria API iniciada | CitizenTech=Zeladoria API Urbana | turma=3ESPH | lider RM=556095 | ambiente=Development
+2026-11-25 19:57:26.590 info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5080
+2026-11-25 19:57:26.591 info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+2026-11-25 19:57:26.591 info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+2026-11-25 19:57:26.591 info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\src\CitizenTech.Zeladoria.Api
+2026-11-25 19:57:28.015 info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (39ms) [Parameters=[@id='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(2) [o].[ID], [o].[TITULO], [r].[NOME], [r].[BAIRRO], [c].[NOME], [o].[ENDERECO], [o].[UNIDADE], [o].[QUANTIDADEESTIMADA], [o].[QUANTIDADEPENDENTE], [o].[SITUACAO], [o].[ABERTAUTC], (
+          SELECT COUNT(*)
+          FROM [IMAGEM_OCORRENCIA] AS [i]
+          WHERE [i].[OCORRENCIAID] = [o].[ID]), (
+          SELECT COUNT(*)
+          FROM [ATENDIMENTO_OCORRENCIA] AS [a]
+          WHERE [a].[OCORRENCIAID] = [o].[ID])
+      FROM [OCORRENCIA] AS [o]
+      INNER JOIN [REGIAO] AS [r] ON [o].[REGIAOID] = [r].[ID]
+      INNER JOIN [CATEGORIA_OCORRENCIA] AS [c] ON [o].[CATEGORIAID] = [c].[ID]
+      WHERE [o].[ID] = @id
+      ORDER BY [o].[ID]

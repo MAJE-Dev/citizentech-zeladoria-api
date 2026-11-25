@@ -1,0 +1,13 @@
+﻿-- 2026-11-25 19:56:59 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=01_Criar_Estrutura.sql
+
+TABELA_CRIADA          create_date        
+-------------          -----------        
+REGIAO                 11/25/2026 19:56:59
+CATEGORIA_OCORRENCIA   11/25/2026 19:56:59
+OCORRENCIA             11/25/2026 19:56:59
+IMAGEM_OCORRENCIA      11/25/2026 19:56:59
+ATENDIMENTO_OCORRENCIA 11/25/2026 19:56:59
+
+
+
+-- OK: 01_Criar_Estrutura.sql executado sem erro.

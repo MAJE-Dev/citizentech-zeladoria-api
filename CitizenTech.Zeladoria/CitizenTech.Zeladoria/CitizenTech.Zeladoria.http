@@ -1,6 +1,0 @@
-@CitizenTech.Zeladoria_HostAddress = http://localhost:5032
-
-GET {{CitizenTech.Zeladoria_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

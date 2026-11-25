@@ -1,0 +1,109 @@
+﻿
+====================================================================================================
+T05 - Imagem com ID confirmado como ausente e upload para vínculo inexistente | E08
+Data/hora: 2026-11-25 19:57:13 -03:00 | Executor: VitorCardoso_RM556404 | API: http://localhost:5080 | Banco: GS_CSHARP_ZELADORIA em (localdb)\MSSQLLocalDB | Máquina: VITORPC
+====================================================================================================
+Esperado: 404 coerente; sem gravação; cliente de teste continua utilizável.
+-- 2026-11-25 19:57:13 -03:00 | servidor=(localdb)\MSSQLLocalDB | banco=GS_CSHARP_ZELADORIA | script=consulta
+
+IMAGEM_999999_EXISTE
+--------------------
+                   0
+
+
+
+
+OCORRENCIA_999999_EXISTE
+------------------------
+                       0
+
+
+
+
+>>> GET /api/imagens/999999 (metadados)
+    curl.exe http://localhost:5080/api/imagens/999999
+    HTTP/1.1 404 Not Found
+    Content-Type: application/json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Imagem inexistente","status":404,"detail":"Não existe imagem 999999.","traceId":"00-2ebcb5d300348472c60f70ac56813285-7c926e4dc8ece996-00"}
+    => Esperado HTTP 404 | Observado HTTP 404 | CONFERE
+
+>>> GET /api/imagens/999999/conteudo
+    curl.exe http://localhost:5080/api/imagens/999999/conteudo
+    HTTP/1.1 404 Not Found
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Imagem inexistente","status":404,"detail":"Não existe imagem 999999.","traceId":"00-3e1687ddd3fbacd33fb1b5945ba66c61-6d574eae36c5f061-00"}
+    => Esperado HTTP 404 | Observado HTTP 404 | CONFERE
+
+>>> POST imagem válida para ocorrência 999999 (vínculo inexistente)
+    curl.exe -X POST http://localhost:5080/api/ocorrencias/999999/imagens -F Arquivo=@C:\Users\eaeri\Downloads\CSharp\GS_CSHARP_KaioSouza_RM556095\amostras\buraco_poste_apagado_mooca.jpg;type=image/jpeg --form-string Titulo=Vinculo inexistente --form-string Executor=VitorCardoso_RM556404
+    HTTP/1.1 404 Not Found
+    Content-Type: application/problem+json; charset=utf-8
+    
+    {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.5","title":"Ocorrência inexistente","status":404,"detail":"Não existe ocorrência 999999; nenhuma imagem foi gravada.","traceId":"00-569c6fb5d61131a73118888e68cf058a-636342fe6390d618-00"}
+    => Esperado HTTP 404 | Observado HTTP 404 | CONFERE
+
+>>> Cliente: metadados 999999 (trata 404 sem travar)
+    dotnet CitizenTech.Zeladoria.Cliente.dll metadados 999999
+    [cliente] 2026-11-25 19:57:13 -03:00 | API http://localhost:5080 | comando: metadados 999999
+    HTTP 404 Not Found | Content-Type: application/json; charset=utf-8
+    {
+      "type": "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+      "title": "Imagem inexistente",
+      "status": 404,
+      "detail": "Não existe imagem 999999.",
+      "traceId": "00-bc256161f89fc7a821086b4c4fbb4732-2250a8e882d1d76e-00"
+    }
+    (exit code do cliente: 1)
+    => Esperado exit 1 | Observado exit 1 | CONFERE
+
+>>> Cliente segue utilizável: equipe
+    dotnet CitizenTech.Zeladoria.Cliente.dll equipe
+    [cliente] 2026-11-25 19:57:14 -03:00 | API http://localhost:5080 | comando: equipe
+    HTTP 200 OK | Content-Type: application/json; charset=utf-8
+    {
+      "citizenTech": "Zeladoria API Urbana",
+      "turma": "3ESPH",
+      "liderRm": "556095",
+      "integrantes": [
+        {
+          "nomeCompleto": "Kaio Drago Lima Souza",
+          "rm": "556095",
+          "turma": "3ESPH",
+          "identificacao": "KaioSouza_RM556095",
+          "lider": true
+        },
+        {
+          "nomeCompleto": "Gustavo Viega Martins",
+          "rm": "555885",
+          "turma": "3ESPH",
+          "identificacao": "GustavoMartins_RM555885",
+          "lider": false
+        },
+        {
+          "nomeCompleto": "Gustavo Yuji Osugi",
+          "rm": "555034",
+          "turma": "3ESPH",
+          "identificacao": "GustavoOsugi_RM555034",
+          "lider": false
+        },
+        {
+          "nomeCompleto": "Otávio Santos de Lima Ferrão",
+          "rm": "556452",
+          "turma": "3ESPH",
+          "identificacao": "OtavioFerrao_RM556452",
+          "lider": false
+        },
+        {
+          "nomeCompleto": "Vitor Rivas Cardoso",
+          "rm": "556404",
+          "turma": "3ESPH",
+          "identificacao": "VitorCardoso_RM556404",
+          "lider": false
+        }
+      ]
+    }
+    (exit code do cliente: 0)
+    => Esperado exit 0 | Observado exit 0 | CONFERE
+    => Verificação: Nenhum registro novo em IMAGEM_OCORRENCIA (1 -> 1) | CONFERE
